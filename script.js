@@ -9,12 +9,11 @@
     sv: {
       skip: "Hoppa till kartan",
       visitor: "Besökare",
-      tagline: "Två ingångar längst upp. Kartan visar foodtrucks i landet du är i.",
-      ownerTitle: "Lägg in din foodtruck",
-      ownerHelp: "Namn, bild, plats och öppettider. En dag, eller många dagar framåt om du står på samma plats. Trucken sparas i den här webbläsaren.",
-      name: "Vilken foodtruck",
-      blurb: "Vad serverar ni",
-      photo: "Bilder på trucken",
+      tagline: "Kartan visar foodtrucks i det land du är i. Är du i Sverige ser du trucks i Sverige. Är du i Norge ser du trucks i Norge.",
+      ownerTitle: "Så syns du för besökare",
+      ownerHelp: "Besökare i samma land som din truck ser dig på kartan. Besökare i ett annat land ser dig inte. Besökaren ser bara det du lägger in: namn, bilder, plats och öppettider. En dag, eller många dagar framåt om du står på samma plats. På den här sidan sparas uppgifterna i den här webbläsaren.",
+      name: "Namn",
+      photo: "Bilder",
       city: "Plats, med ord",
       pinMissing: "Platsen på kartan saknas.",
       pinSet: "Plats satt på kartan.",
@@ -31,12 +30,12 @@
       cancel: "Avbryt",
       place: "Klicka på kartan där trucken står.",
       placeCancel: "Avbryt",
-      listAll: "Alla i landet",
+      listAll: "Foodtrucks i ditt land",
       listToday: "Ute idag",
       filterAll: "Alla",
       filterToday: "Idag",
-      emptyAll: "Inga foodtrucks i det här landet ännu.",
-      emptyToday: "Ingen foodtruck är ute idag i det här landet.",
+      emptyAll: "Inga foodtrucks är inlagda i det här landet ännu.",
+      emptyToday: "Ingen av de inlagda truckarna är ute idag.",
       summary: "{n} foodtrucks",
       openNow: "Öppen nu",
       later: "Ute idag",
@@ -45,7 +44,6 @@
       weekdays: "Vardagar",
       weekends: "Helg",
       days: "{n} dagar",
-      example: "Exempel",
       remove: "Ta bort min truck",
       closeDialog: "Stäng",
       hours: "Öppet {from}–{to}",
@@ -59,7 +57,7 @@
       badHours: "Stängning måste vara efter öppning.",
       saved: "Sparad. Den syns på kartan i den här webbläsaren.",
       photoFail: "Bilden fick inte plats och sparades inte. Trucken är sparad utan bild.",
-      footer: "Exempeltruckarna är påhittade. En truck du lägger in syns i den här webbläsaren, inte för alla andra. Ingen egen domän är kopplad.",
+      footer: "Tryck på en truck. Du ser namn, bilder, plats och öppettider. Det är det ägaren har lagt in. Inget annat.",
       outside: "Foodtruckheaven.com visar Sverige och Norge. Vi gissade Sverige eftersom du verkar vara någon annanstans.",
       mapLabel: "Karta över foodtrucks",
       countryLabel: "Land"
@@ -67,12 +65,11 @@
     nb: {
       skip: "Hopp til kartet",
       visitor: "Besøkere",
-      tagline: "To knapper helt øverst. Kartet viser foodtrucks i landet du er i.",
-      ownerTitle: "Legg inn foodtrucken din",
-      ownerHelp: "Navn, bilde, sted og åpningstider. Én dag, eller mange dager fremover om du står på samme plass. Trucken lagres i denne nettleseren.",
-      name: "Hvilken foodtruck",
-      blurb: "Hva serverer dere",
-      photo: "Bilder av trucken",
+      tagline: "Kartet viser foodtrucks i det landet du er i. Er du i Sverige ser du trucks i Sverige. Er du i Norge ser du trucks i Norge.",
+      ownerTitle: "Slik synes du for besøkende",
+      ownerHelp: "Besøkende i samme land som trucken din ser deg på kartet. Besøkende i et annet land ser deg ikke. Besøkende ser bare det du legger inn: navn, bilder, sted og åpningstider. Én dag, eller mange dager fremover om du står på samme plass. På denne siden lagres opplysningene i denne nettleseren.",
+      name: "Navn",
+      photo: "Bilder",
       city: "Sted, med ord",
       pinMissing: "Stedet på kartet mangler.",
       pinSet: "Sted satt på kartet.",
@@ -89,12 +86,12 @@
       cancel: "Avbryt",
       place: "Klikk på kartet der trucken står.",
       placeCancel: "Avbryt",
-      listAll: "Alle i landet",
+      listAll: "Foodtrucks i ditt land",
       listToday: "Ute i dag",
       filterAll: "Alle",
       filterToday: "I dag",
-      emptyAll: "Ingen foodtrucks i dette landet ennå.",
-      emptyToday: "Ingen foodtruck er ute i dag i dette landet.",
+      emptyAll: "Ingen foodtrucks er lagt inn i dette landet ennå.",
+      emptyToday: "Ingen av de innlagte truckene er ute i dag.",
       summary: "{n} foodtrucks",
       openNow: "Åpen nå",
       later: "Ute i dag",
@@ -103,7 +100,6 @@
       weekdays: "Ukedager",
       weekends: "Helg",
       days: "{n} dager",
-      example: "Eksempel",
       remove: "Fjern trucken min",
       closeDialog: "Lukk",
       hours: "Åpent {from}–{to}",
@@ -117,7 +113,7 @@
       badHours: "Stenging må være etter åpning.",
       saved: "Lagret. Den vises på kartet i denne nettleseren.",
       photoFail: "Bildet fikk ikke plass og ble ikke lagret. Trucken er lagret uten bilde.",
-      footer: "Eksempeltruckene er oppdiktet. En truck du legger inn vises i denne nettleseren, ikke for alle andre. Ingen eget domene er koblet til.",
+      footer: "Trykk på en truck. Du ser navn, bilder, sted og åpningstider. Det er det eieren har lagt inn. Ikke noe annet.",
       outside: "Foodtruckheaven.com viser Sverige og Norge. Vi gjettet Sverige fordi du ser ut til å være et annet sted.",
       mapLabel: "Kart over foodtrucks",
       countryLabel: "Land"
@@ -137,17 +133,6 @@
     SE: [[55.2, 10.8], [69.1, 24.3]],
     NO: [[57.9, 4.4], [71.3, 31.3]]
   };
-
-  var DEMOS = [
-    { id: "se-korv", name: "Korvkompaniet", blurb: "Grillkorv och coleslaw", country: "SE", city: "Stockholm, Södermalm", lat: 59.317, lng: 18.065, hours: { from: "11:00", to: "21:00" }, weekdays: [0, 1, 2, 3, 4, 5, 6], demo: true },
-    { id: "se-taco", name: "Tacotrucken", blurb: "Tacos och lime", country: "SE", city: "Göteborg, Haga", lat: 57.699, lng: 11.956, hours: { from: "11:00", to: "20:00" }, weekdays: [1, 2, 3, 4, 5, 6], demo: true },
-    { id: "se-falafel", name: "Falafel i farten", blurb: "Falafel och sambal", country: "SE", city: "Malmö", lat: 55.596, lng: 12.993, hours: { from: "11:00", to: "19:00" }, weekdays: [1, 2, 3, 4, 5], demo: true },
-    { id: "se-vaffel", name: "Våffelverket", blurb: "Varm våffla", country: "SE", city: "Uppsala", lat: 59.858, lng: 17.638, hours: { from: "10:00", to: "17:00" }, weekdays: [0, 6], demo: true },
-    { id: "no-reker", name: "Reker & Rug", blurb: "Reker og sitron", country: "NO", city: "Oslo, Grünerløkka", lat: 59.923, lng: 10.759, hours: { from: "11:00", to: "21:00" }, weekdays: [0, 1, 2, 3, 4, 5, 6], demo: true },
-    { id: "no-burger", name: "Burgerbrakka", blurb: "Burger og pommes", country: "NO", city: "Bergen", lat: 60.397, lng: 5.324, hours: { from: "12:00", to: "22:00" }, weekdays: [0, 1, 2, 3, 4, 5, 6], demo: true },
-    { id: "no-polse", name: "Pølsebua", blurb: "Pølse med lompe", country: "NO", city: "Trondheim", lat: 63.434, lng: 10.41, hours: { from: "11:00", to: "20:00" }, weekdays: [1, 2, 3, 4, 5, 6], demo: true },
-    { id: "no-lefse", name: "Lefserullen", blurb: "Lefse og kaffe", country: "NO", city: "Stavanger", lat: 58.97, lng: 5.733, hours: { from: "11:00", to: "18:00" }, weekdays: [0, 6], demo: true }
-  ];
 
   var state = {
     country: "SE",
@@ -255,7 +240,7 @@
     localStorage.setItem(STORAGE_TRUCKS, JSON.stringify(list));
   }
   function allTrucks() {
-    return DEMOS.concat(loadOwn());
+    return loadOwn();
   }
   function inCountry(list) {
     return list.filter(function (tr) { return tr.country === state.country; });
@@ -270,7 +255,6 @@
     $("ownerTitle").textContent = t("ownerTitle");
     $("ownerHelp").textContent = t("ownerHelp");
     $("lblName").textContent = t("name");
-    $("lblBlurb").textContent = t("blurb");
     $("lblPhoto").textContent = t("photo");
     $("lblCity").textContent = t("city");
     $("pickPlace").textContent = t("pick");
@@ -369,10 +353,14 @@
     var list = visibleTrucks(now);
     var heading = state.filter === "today" ? t("listToday") : t("listAll");
     var countryName = state.country === "NO" ? "Norge" : "Sverige";
-    $("listHeading").textContent = countryName + " · " + heading;
+    $("listHeading").textContent = heading;
+    $("listHeading").setAttribute("data-country", countryName);
+    var countLine = t("summary").replace("{n}", String(list.length));
     $("listSummary").textContent = list.length
-      ? t("summary").replace("{n}", String(list.length))
-      : (state.filter === "today" ? t("emptyToday") : t("emptyAll"));
+      ? countryName + " · " + countLine
+      : (state.filter === "today" && inCountry(allTrucks()).length
+          ? t("emptyToday")
+          : t("emptyAll"));
 
     var ul = $("truckList");
     ul.textContent = "";
@@ -449,16 +437,14 @@
       photo.hidden = true;
       photo.removeAttribute("src");
     }
-    $("detailBadge").hidden = !tr.demo;
-    $("detailBadge").textContent = t("example");
+    $("detailBadge").hidden = true;
     $("detailName").textContent = tr.name;
     $("detailCity").textContent = tr.city;
-    $("detailBlurb").textContent = tr.blurb || "";
     $("detailHours").textContent = t("hours").replace("{from}", tr.hours.from).replace("{to}", tr.hours.to);
     $("detailWhen").textContent = scheduleText(tr);
     $("detailStatus").textContent = status === "now" ? t("openNow") : (status === "later" ? t("later") : t("off"));
     var del = $("detailDelete");
-    del.hidden = !!tr.demo;
+    del.hidden = false;
     del.onclick = function () {
       var own = loadOwn().filter(function (item) { return item.id !== tr.id; });
       saveOwn(own);
@@ -543,7 +529,6 @@
     err.textContent = "";
     var name = $("truckName").value.trim();
     var city = $("truckCity").value.trim();
-    var blurb = $("truckBlurb").value.trim();
     if (!name) { err.textContent = t("needName"); return; }
     if (!city) { err.textContent = t("needCity"); return; }
     if (!state.pin) { err.textContent = t("needPin"); return; }
@@ -568,7 +553,6 @@
     var truck = {
       id: "own-" + Date.now(),
       name: name,
-      blurb: blurb,
       country: state.country,
       city: city,
       lat: state.pin.lat,
