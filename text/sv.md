@@ -31,56 +31,58 @@ Det här ska du fylla i:
 
 Spara det du vill att en besökare ska se. Kartan visar inget utöver det.
 
-### Favoriter
+### Favorit
 
-Rubrik: Favoriter
+Rubrik: Favorit
 
-Brödtext: Spara en truck som favorit så hittar du tillbaka till den. Du kan bara spara en truck som ägaren själv har lagt in.
+Brödtext: Märk en truck som favorit så hittar du tillbaka till den. Favoriten lägger inte till något i kartpopupen. Där står fortfarande bara namn, bilder, plats och öppettider.
 
-Knapp: Spara som favorit
+Knapp: Märk som favorit
 
-Knapp när den redan är sparad: Sparad som favorit
+Knapp när den redan är märkt: Favorit
 
 Tom lista: Du har inga favoriter ännu.
 
-### Mejl när en truck öppnar
-
-Rubrik: Mejl när en truck öppnar
-
-Brödtext: Slå på mejl för en truck du följer. Då får du ett mejl när ägaren har satt den som öppen. Mejlet tar med namn, plats och öppettider som ägaren har lagt in.
-
-Knapp: Mejla mig när den öppnar
-
-Av: Inget mejl
-
-### Rabattkod till följare
+### Rabattkod
 
 För foodtruck:
 
-Rubrik: Rabattkod till följare
+Rubrik: Rabattkod
 
-Brödtext: Skriv en rabattkod om du vill ge den till dem som följer din truck. Besökaren ser koden bara om du har lagt in en. Lämna fältet tomt om du inte har någon kod.
+Brödtext: Skriv en kod om du vill ge den till dem som har din truck som favorit. Koden syns inte på kartan.
 
 Fält: Rabattkod
 
-För besökare:
+Tomt fält: Lämna tomt om du inte har någon kod.
+
+För besökare som har trucken som favorit:
 
 Rubrik: Rabattkod
 
-Brödtext: En rabattkod syns här bara om truckens ägare har lagt in en till sina följare.
+Brödtext: Den här koden har ägaren lagt in för dig som har trucken som favorit.
 
 Tom: Ingen rabattkod är inlagd.
 
-### Logga in
+För andra besökare: visa inte koden, och skriv inte ut den på kartan.
 
-Rubrik: Logga in
+### Förfrågan
 
-Brödtext: Logga in med Apple eller Google. Då kan du spara favoriter, få mejl när en truck öppnar, och se en rabattkod om ägaren har lagt in en.
+Rubrik: Be trucken komma
 
-Knapp: Fortsätt med Apple
+Brödtext: Be en truck komma till en plats vid en tid. Trucken ser plats och tid. Inget annat.
 
-Knapp: Fortsätt med Google
+Fält: Plats
+
+Fält: Tid
+
+Knapp: Skicka förfrågan
+
+Saknas plats eller tid: Fyll i plats och tid.
+
+Skickad: Förfrågan skickad. Trucken ser plats och tid.
 
 ## Inte på sidan
 
-Inga påhittade trucks, menyer, priser, rabattkoder eller omdömen. En truck, en favorit och en kod syns bara om ägaren själv har lagt in den.
+Inloggning med Apple eller Google finns inte. Mejl när en favorit öppnar finns inte. Skriv inte de texterna på sidan.
+
+Inga påhittade trucks, menyer, priser, rabattkoder, platser eller tider. En truck syns bara om ägaren själv har lagt in den. En rabattkod syns bara för den som har trucken som favorit, och bara om ägaren har lagt in en kod.
