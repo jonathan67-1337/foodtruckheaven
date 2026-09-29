@@ -83,6 +83,7 @@ button { cursor: pointer; }
 }
 .choice.visitor[aria-pressed="true"]:hover { background: var(--forest-deep); border-color: var(--forest-deep); }
 .choice.owner[aria-pressed="true"] { transform: none; box-shadow: none; }
+.owner-pitch { margin: 16px 0 0; font-size: 1.15rem; font-weight: 700; letter-spacing: -0.02em; }
 .tagline { margin: 14px 0 18px; color: var(--muted); font-size: 1.05rem; line-height: 1.5; }
 
 .owner-panel { background: var(--surface); border-bottom: 1px solid var(--hairline); }

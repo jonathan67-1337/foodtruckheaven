@@ -363,6 +363,7 @@
     $("btnVisitor").textContent = t("visitor");
     $("tagline").textContent = state.outside ? t("outside") : t("tagline");
     $("ownerTitle").textContent = t("ownerTitle");
+    $("ownerPitch").textContent = t("ownerTitle");
     $("ownerHelp").textContent = t("ownerHelp");
     $("lblName").textContent = t("name");
     $("photoHeading").textContent = t("photoHeading");
