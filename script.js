@@ -75,8 +75,12 @@
       listToday: "Ute idag",
       filterAll: "Alla",
       filterToday: "Idag",
+      filterNow: "Öppen nu",
       emptyAll: "Inga foodtrucks är inlagda i det här landet ännu.",
       emptyToday: "Ingen av de inlagda truckarna är ute idag.",
+      emptyNow: "Ingen foodtruck är öppen just nu.",
+      oneLeft: "1 dag kvar",
+      manyLeft: "{n} dagar kvar",
       summary: "{n} foodtrucks",
       openNow: "Öppen nu",
       later: "Ute idag",
@@ -101,12 +105,14 @@
       footer: "Tryck på en truck. Du ser namn, bilder, plats och öppettider. Det är det ägaren har lagt in. Inget annat.",
       outside: "Foodtruckheaven är ett gratis sätt att marknadsföra sin foodtruck. Hitta foodtrucks på kartan i det land du är i. Du kan byta land i inställningarna.",
       mapLabel: "Karta över foodtrucks",
-      countryLabel: "Land"
+      countryLabel: "Land",
+      settings: "Inställningar",
+      settingsHelp: "Landet sätts efter var du är. Du kan byta det här."
     },
     nb: {
       skip: "Hopp til kartet",
       visitor: "Besøkere",
-      tagline: "En foodtruck markedsfører seg ved å legge seg inn selv. Du finner den på kartet, i det landet du er i. Er du i Sverige ser du trucks i Sverige. Er du i Norge ser du trucks i Norge.",
+      tagline: "En foodtruck markedsfører seg ved å legge seg inn selv. Du finner den på kartet, i det landet du er i. Du kan bytte land i innstillingene.",
       ownerTitle: "Markedsfør foodtrucken din",
       ownerHelp: "Du markedsfører trucken ved å legge inn navn, bilder av trucken, bilder av maten, sted og åpningstider. Besøkende i samme land finner deg på kartet. Besøkende i et annet land ser deg ikke. Besøkende ser bare det du legger inn: navn, bilder, sted og åpningstider. Én dag, eller mange dager fremover om du står på samme plass. På denne siden lagres opplysningene i denne nettleseren.",
       name: "Navn",
@@ -169,8 +175,12 @@
       listToday: "Ute i dag",
       filterAll: "Alle",
       filterToday: "I dag",
+      filterNow: "Åpen nå",
       emptyAll: "Ingen foodtrucks er lagt inn i dette landet ennå.",
       emptyToday: "Ingen av de innlagte truckene er ute i dag.",
+      emptyNow: "Ingen foodtruck er åpen akkurat nå.",
+      oneLeft: "1 dag igjen",
+      manyLeft: "{n} dager igjen",
       summary: "{n} foodtrucks",
       openNow: "Åpen nå",
       later: "Ute i dag",
@@ -193,9 +203,11 @@
       saved: "Lagret. Den vises på kartet i denne nettleseren.",
       photoFail: "Bildet fikk ikke plass og ble ikke lagret. Trucken er lagret uten bilde.",
       footer: "Trykk på en truck. Du ser navn, bilder, sted og åpningstider. Det er det eieren har lagt inn. Ikke noe annet.",
-      outside: "Foodtruckheaven.com viser Sverige og Norge. Vi gjettet Sverige fordi du ser ut til å være et annet sted.",
+      outside: "Foodtruckheaven er en gratis måte å markedsføre foodtrucken sin på. Finn foodtrucks på kartet i det landet du er i. Du kan bytte land i innstillingene.",
       mapLabel: "Kart over foodtrucks",
-      countryLabel: "Land"
+      countryLabel: "Land",
+      settings: "Innstillinger",
+      settingsHelp: "Landet settes etter hvor du er. Du kan bytte det her."
     }
   };
 
@@ -309,13 +321,14 @@
       return [];
     }
   }
-  function isCountry(code) {
-    if (typeof code !== "string" || !/^[A-Z]{2}$/.test(code)) return false;
-    if (boundsByCode && Object.keys(boundsByCode).length) return !!boundsByCode[code];
-    return true;
+  function isAlpha2(code) {
+    return typeof code === "string" && /^[A-Z]{2}$/.test(code);
+  }
+  function loadedCountry(code) {
+    return isAlpha2(code) && !!(boundsByCode && boundsByCode[code]);
   }
   function validOwn(tr) {
-    return tr && typeof tr.name === "string" && isCountry(tr.country) &&
+    return tr && typeof tr.name === "string" && isAlpha2(tr.country) &&
       typeof tr.lat === "number" && typeof tr.lng === "number" &&
       tr.hours && tr.hours.from && tr.hours.to &&
       Array.isArray(tr.dates);
@@ -323,16 +336,11 @@
   function saveOwn(list) {
     localStorage.setItem(STORAGE_TRUCKS, JSON.stringify(list));
   }
-  var published = [];
   function allTrucks() {
-    var own = loadOwn();
-    var ids = {};
-    own.forEach(function (tr) { ids[tr.id] = true; });
-    return published.filter(function (tr) { return validOwn(tr) && !ids[tr.id]; }).concat(own);
+    return loadOwn();
   }
   function inCountry(list) {
-    if (!state.country) return list.slice();
-    return list.filter(function (tr) { return tr.country === state.country; });
+    return list.filter(function (tr) { return state.country && tr.country === state.country; });
   }
   function isOwnId(id) {
     var found = false;
@@ -408,9 +416,15 @@
     $("cancelPlace").textContent = t("placeCancel");
     $("filterAll").textContent = t("filterAll");
     $("filterToday").textContent = t("filterToday");
+    if ($("filterNow")) $("filterNow").textContent = t("filterNow");
     $("footerNote").textContent = t("footer");
     $("detailClose").setAttribute("aria-label", t("closeDialog"));
     $("detailDelete").textContent = t("remove");
+    if ($("openSettings")) $("openSettings").textContent = t("settings");
+    if ($("settingsTitle")) $("settingsTitle").textContent = t("settings");
+    if ($("settingsHelp")) $("settingsHelp").textContent = t("settingsHelp");
+    if ($("lblCountry")) $("lblCountry").textContent = t("countryLabel");
+    if ($("settingsClose")) $("settingsClose").setAttribute("aria-label", t("closeDialog"));
     fillCountrySelect();
     renderCities();
     $("map").setAttribute("aria-label", t("mapLabel"));
@@ -423,25 +437,65 @@
     el.textContent = state.pin ? t("pinSet") : t("pinMissing");
   }
 
-  function fitMap(code) {
-    if (!map) return;
+  var visitorPos = null;
+  var geoAsked = false;
+  function boundsBox(code) {
     var entry = boundsByCode && code && boundsByCode[code];
-    var box = entry && entry[1];
-    if (box && box.length === 4) map.fitBounds([[box[1], box[0]], [box[3], box[2]]], { padding: [24, 24] });
+    if (!entry || !entry.length) return null;
+    var box = entry;
+    if (entry.length === 2 && Object.prototype.toString.call(entry[1]) === "[object Array]") box = entry[1];
+    if (!box || box.length !== 4) return null;
+    for (var i = 0; i < 4; i++) {
+      if (typeof box[i] !== "number" || !isFinite(box[i])) return null;
+    }
+    return box;
+  }
+  function showWorld() {
+    if (!map) return;
+    if (typeof map.fitWorld === "function") map.fitWorld();
     else map.setView([20, 0], 2);
+  }
+  function focusMap(point) {
+    if (!map) return;
+    var trucks = state.country ? inCountry(allTrucks()) : [];
+    if (trucks.length) {
+      var latlngs = trucks.map(function (tr) { return [tr.lat, tr.lng]; });
+      map.fitBounds(L.latLngBounds(latlngs), { padding: [24, 24], maxZoom: 13 });
+      return;
+    }
+    var box = boundsBox(state.country);
+    if (box) {
+      map.fitBounds([[box[1], box[0]], [box[3], box[2]]], { padding: [24, 24] });
+      return;
+    }
+    if (point && typeof point.lat === "number" && typeof point.lng === "number") {
+      map.setView([point.lat, point.lng], 6);
+      return;
+    }
+    showWorld();
+  }
+  function regionName(code) {
+    if (!code) return "";
+    var lang = state.lang === "nb" ? "nb" : "sv";
+    try {
+      var names = new Intl.DisplayNames([lang], { type: "region" });
+      return names.of(code) || code;
+    } catch (e) {
+      return code;
+    }
   }
   function fillCountrySelect() {
     var pick = $("countryPick");
     if (!pick || !boundsByCode) return;
+    var lang = state.lang === "nb" ? "nb" : "sv";
     var names = null;
-    try { names = new Intl.DisplayNames(["sv"], { type: "region" }); } catch (e) {}
-    var rows = Object.keys(boundsByCode).map(function (code) {
+    try { names = new Intl.DisplayNames([lang], { type: "region" }); } catch (e) {}
+    var rows = Object.keys(boundsByCode).filter(isAlpha2).map(function (code) {
       var label = code;
       try { if (names) label = names.of(code) || code; } catch (e2) {}
       return { code: code, label: label };
     });
-    rows.sort(function (a, b) { return a.label.localeCompare(b.label, "sv"); });
-    var current = pick.value;
+    rows.sort(function (a, b) { return a.label.localeCompare(b.label, lang); });
     pick.textContent = "";
     var blank = document.createElement("option");
     blank.value = "";
@@ -453,7 +507,49 @@
       opt.textContent = row.label;
       pick.appendChild(opt);
     });
-    pick.value = state.country && isCountry(state.country) ? state.country : "";
+    pick.value = loadedCountry(state.country) ? state.country : "";
+  }
+  function askVisitorPosition() {
+    if (visitorPos || geoAsked) return;
+    geoAsked = true;
+    if (!navigator.geolocation) return;
+    navigator.geolocation.getCurrentPosition(function (pos) {
+      if (!pos || !pos.coords) return;
+      var lat = pos.coords.latitude;
+      var lng = pos.coords.longitude;
+      if (typeof lat !== "number" || typeof lng !== "number") return;
+      visitorPos = { lat: lat, lng: lng };
+      render();
+    }, function () {}, { enableHighAccuracy: false, timeout: 8000, maximumAge: 600000 });
+  }
+  function haversineKm(lat1, lng1, lat2, lng2) {
+    var r = 6371;
+    var rad = Math.PI / 180;
+    var dLat = (lat2 - lat1) * rad;
+    var dLng = (lng2 - lng1) * rad;
+    var a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+      Math.cos(lat1 * rad) * Math.cos(lat2 * rad) * Math.sin(dLng / 2) * Math.sin(dLng / 2);
+    return 2 * r * Math.asin(Math.min(1, Math.sqrt(a)));
+  }
+  function distanceLabel(tr) {
+    if (!visitorPos || !tr) return "";
+    var km = haversineKm(visitorPos.lat, visitorPos.lng, tr.lat, tr.lng);
+    if (!isFinite(km)) return "";
+    return km.toFixed(1).replace(".", ",") + " km";
+  }
+  function daysRemaining(tr, now) {
+    var today = isoDate(now || new Date());
+    var dates = tr && tr.dates || [];
+    var n = 0;
+    for (var i = 0; i < dates.length; i++) {
+      if (dates[i] >= today) n += 1;
+    }
+    return n;
+  }
+  function daysLeftLabel(n) {
+    if (!n) return "";
+    if (n === 1) return t("oneLeft");
+    return t("manyLeft").replace("{n}", String(n));
   }
   function renderCities() {
     var row = $("cityRow");
@@ -471,21 +567,18 @@
       row.appendChild(btn);
     });
   }
-  function setCountry(code, persist) {
-    var next = isCountry(code) ? code : "";
-    if (state.country !== next) state.pin = null;
-    state.country = next;
-    state.lang = next === "NO" ? "nb" : "sv";
-    if (next) state.outside = false;
+  function setCountry(code, persist, point) {
+    if (!loadedCountry(code)) return;
+    if (state.country !== code) state.pin = null;
+    state.country = code;
+    state.lang = code === "NO" ? "nb" : "sv";
+    state.outside = false;
     if (persist) {
-      try {
-        if (next) localStorage.setItem(STORAGE_COUNTRY, next);
-        else localStorage.removeItem(STORAGE_COUNTRY);
-      } catch (e) {}
+      try { localStorage.setItem(STORAGE_COUNTRY, code); } catch (e) {}
     }
     applyCopy();
     if (map) {
-      fitMap(next);
+      focusMap(point || null);
       render();
     }
   }
@@ -507,6 +600,7 @@
     state.filter = filter;
     $("filterAll").setAttribute("aria-pressed", filter === "all" ? "true" : "false");
     $("filterToday").setAttribute("aria-pressed", filter === "today" ? "true" : "false");
+    if ($("filterNow")) $("filterNow").setAttribute("aria-pressed", filter === "now" ? "true" : "false");
     render();
   }
 
@@ -514,6 +608,8 @@
     var list = inCountry(allTrucks());
     if (state.filter === "today") {
       list = list.filter(function (tr) { return isOpenOnDay(tr, now); });
+    } else if (state.filter === "now") {
+      list = list.filter(function (tr) { return statusOf(tr, now) === "now"; });
     }
     list.sort(function (a, b) {
       var order = { now: 0, later: 1, off: 2 };
@@ -522,12 +618,14 @@
     return list;
   }
 
-  function markerIcon(status, letter) {
+  function markerIcon(status, letter, leftText) {
     var cls = status === "now" ? "pin-now" : (status === "later" ? "pin-later" : "pin-off");
+    var html = "<span><b>" + letter + "</b></span>";
+    if (leftText) html += "<i>" + escapeText(leftText) + "</i>";
     return L.divIcon({
       className: "pin " + cls,
-      html: "<span><b>" + letter + "</b></span>",
-      iconSize: [34, 34],
+      html: html,
+      iconSize: leftText ? [148, 36] : [34, 34],
       iconAnchor: [17, 30],
       popupAnchor: [0, -28]
     });
@@ -549,16 +647,18 @@
   function render() {
     var now = new Date();
     var list = visibleTrucks(now);
-    var heading = state.filter === "today" ? t("listToday") : t("listAll");
-    var countryName = state.country === "NO" ? "Norge" : "Sverige";
+    var heading = state.filter === "today" ? t("listToday") : (state.filter === "now" ? t("filterNow") : t("listAll"));
+    var countryName = regionName(state.country);
     $("listHeading").textContent = heading;
-    $("listHeading").setAttribute("data-country", countryName);
+    if (countryName) $("listHeading").setAttribute("data-country", countryName);
+    else $("listHeading").removeAttribute("data-country");
     var countLine = t("summary").replace("{n}", String(list.length));
+    var emptyText = t("emptyAll");
+    if (state.filter === "now") emptyText = t("emptyNow");
+    else if (state.filter === "today" && inCountry(allTrucks()).length) emptyText = t("emptyToday");
     $("listSummary").textContent = list.length
-      ? countryName + " · " + countLine
-      : (state.filter === "today" && inCountry(allTrucks()).length
-          ? t("emptyToday")
-          : t("emptyAll"));
+      ? (countryName ? countryName + " · " + countLine : countLine)
+      : emptyText;
 
     var ul = $("truckList");
     ul.textContent = "";
@@ -568,7 +668,7 @@
     list.forEach(function (tr) {
       var status = statusOf(tr, now);
       var letter = safeLetter(tr.name);
-      var marker = L.marker([tr.lat, tr.lng], { icon: markerIcon(status, letter), title: tr.name });
+      var marker = L.marker([tr.lat, tr.lng], { icon: markerIcon(status, letter, daysLeftLabel(daysRemaining(tr, now))), title: tr.name });
       marker.bindPopup(popupHtml(tr));
       marker.on("click", function () { selectedId = tr.id; });
       marker.addTo(markers);
@@ -584,6 +684,8 @@
       var meta = document.createElement("p");
       meta.className = "meta";
       meta.textContent = tr.city + " · " + t("hours").replace("{from}", tr.hours.from).replace("{to}", tr.hours.to);
+      var dist = distanceLabel(tr);
+      if (dist) meta.textContent += " · " + dist;
       body.appendChild(h);
       body.appendChild(meta);
       btn.appendChild(thumb);
@@ -637,6 +739,8 @@
       var meta = document.createElement("p");
       meta.className = "meta";
       meta.textContent = tr.city + " · " + t("hours").replace("{from}", tr.hours.from).replace("{to}", tr.hours.to);
+      var dist = distanceLabel(tr);
+      if (dist) meta.textContent += " · " + dist;
       body.appendChild(h);
       body.appendChild(meta);
       var days = dayLines(tr);
@@ -690,6 +794,12 @@
     div.appendChild(strong);
     div.appendChild(p);
     div.appendChild(h);
+    var dist = distanceLabel(tr);
+    if (dist) {
+      var distEl = document.createElement("div");
+      distEl.textContent = dist;
+      div.appendChild(distEl);
+    }
     var days = dayLines(tr);
     if (days) {
       var d1 = document.createElement("div");
@@ -848,7 +958,7 @@
     if (state.editingId) {
       loadOwn().forEach(function (item) { if (item.id === state.editingId) existing = item; });
     }
-    if (!existing && !isCountry(state.country)) return;
+    if (!existing && !loadedCountry(state.country)) return;
     var truck = {
       id: existing ? existing.id : ("own-" + Date.now()),
       addedAt: existing && typeof existing.addedAt === "number" ? existing.addedAt : Date.now(),
@@ -911,32 +1021,43 @@
     openDetail(truck);
   }
 
-  function reverseCountry(lat, lng) {
-    var url = "https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=" +
-      encodeURIComponent(lat) + "&longitude=" + encodeURIComponent(lng) + "&localityLanguage=en";
-    return fetch(url).then(function (res) { return res.json(); }).then(function (data) {
-      var code = data && data.countryCode;
-      return (typeof code === "string" && /^[A-Z]{2}$/.test(code)) ? code : null;
-    }).catch(function () { return null; });
-  }
   function detectCountry() {
-    return new Promise(function (resolve) {
-      if (!navigator.geolocation) { resolve(null); return; }
-      var settled = false;
-      function done(code) { if (settled) return; settled = true; resolve(code || null); }
-      var timer = setTimeout(function () { done(null); }, 8000);
-      navigator.geolocation.getCurrentPosition(function (pos) {
+    var saved = null;
+    try { saved = localStorage.getItem(STORAGE_COUNTRY); } catch (e) {}
+    if (loadedCountry(saved)) return Promise.resolve({ code: saved, point: null });
+
+    var ctrl = new AbortController();
+    var timer = setTimeout(function () { ctrl.abort(); }, 2500);
+    return fetch("https://ipwho.is/", { signal: ctrl.signal })
+      .then(function (res) { return res.json(); })
+      .then(function (data) {
         clearTimeout(timer);
-        reverseCountry(pos.coords.latitude, pos.coords.longitude).then(done);
-      }, function () { clearTimeout(timer); done(null); }, { timeout: 7000, maximumAge: 300000 });
-    });
+        var code = data && typeof data.country_code === "string" ? data.country_code.toUpperCase() : "";
+        var point = null;
+        if (data && typeof data.latitude === "number" && typeof data.longitude === "number") {
+          point = { lat: data.latitude, lng: data.longitude };
+        }
+        if (loadedCountry(code)) return { code: code, point: point };
+        return { code: null, point: point };
+      })
+      .catch(function () {
+        clearTimeout(timer);
+        return { code: null, point: null };
+      });
   }
   function loadGeoData() {
-    return Promise.all([
-      fetch("data/country-bounds.json").then(function (res) { return res.json(); }).then(function (data) { boundsByCode = data; }).catch(function () { boundsByCode = {}; }),
-      fetch("data/cities.json").then(function (res) { return res.json(); }).then(function (data) { citiesByCountry = data; }).catch(function () { citiesByCountry = {}; }),
-      fetch("data/trucks.json").then(function (res) { return res.json(); }).then(function (data) { published = Array.isArray(data) ? data.filter(validOwn) : []; }).catch(function () { published = []; })
-    ]);
+    return fetch("data/country-bounds.json")
+      .then(function (res) { return res.json(); })
+      .then(function (data) {
+        boundsByCode = data && typeof data === "object" ? data : {};
+      })
+      .catch(function () { boundsByCode = {}; })
+      .then(function () {
+        return fetch("data/cities.json")
+          .then(function (res) { return res.json(); })
+          .then(function (data) { citiesByCountry = data; })
+          .catch(function () { citiesByCountry = {}; });
+      });
   }
   function openEditor(tr) {
     if (!isOwnId(tr.id)) return;
@@ -1015,6 +1136,8 @@
       var meta = document.createElement("p");
       meta.className = "meta";
       meta.textContent = tr.city + " · " + t("hours").replace("{from}", tr.hours.from).replace("{to}", tr.hours.to);
+      var dist = distanceLabel(tr);
+      if (dist) meta.textContent += " · " + dist;
       body.appendChild(h);
       body.appendChild(meta);
       if (tr.code) {
@@ -1183,6 +1306,7 @@
     });
     $("filterAll").addEventListener("click", function () { setFilter("all"); });
     $("filterToday").addEventListener("click", function () { setFilter("today"); });
+    $("filterNow").addEventListener("click", function () { setFilter("now"); });
     $("pickPlace").addEventListener("click", startPlacing);
     $("cancelPlace").addEventListener("click", function () {
       stopPlacing();
@@ -1230,23 +1354,22 @@
     setMode("visitor");
     setFilter("all");
     onSpanChange();
+    askVisitorPosition();
     loadGeoData().then(function () {
-      var saved = null;
-      try { saved = localStorage.getItem(STORAGE_COUNTRY); } catch (e) {}
-      if (isCountry(saved)) { setCountry(saved, false); return; }
-      return detectCountry().then(function (code) {
-        if (!isCountry(code)) {
-          state.outside = true;
-          state.country = "";
-          state.lang = "sv";
-          applyCopy();
-          fitMap("");
-          render();
-          return;
-        }
-        state.outside = false;
-        setCountry(code, false);
-      });
+      return detectCountry();
+    }).then(function (found) {
+      if (found && loadedCountry(found.code)) {
+        setCountry(found.code, false, found.point);
+        return;
+      }
+      state.outside = false;
+      state.country = "";
+      state.lang = "sv";
+      applyCopy();
+      showWorld();
+      render();
+      var dlg = $("settings");
+      if (dlg && dlg.showModal) dlg.showModal();
     });
   }
 

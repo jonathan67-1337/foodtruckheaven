@@ -34,7 +34,7 @@
     <div class="top-inner">
       <div class="brand-row">
         <a class="brand" href="#top">Foodtruckheaven.com</a>
-        <button type="button" class="btn ghost settings-btn" id="openSettings">Inställningar</button>
+        <button type="button" class="settings-btn" id="openSettings">Inställningar</button>
       </div>
       <div class="choices" role="group" aria-label="Ingång">
         <button type="button" class="choice owner" id="btnOwner">Foodtruck</button>
@@ -49,9 +49,9 @@
 
   <dialog class="detail" id="settings">
     <button class="close" type="button" id="settingsClose" aria-label="Stäng">×</button>
-    <h2>Inställningar</h2>
-    <p class="help">Landet sätts efter var du är. Du kan byta det här.</p>
-    <label for="countryPick">Land</label>
+    <h2 id="settingsTitle">Inställningar</h2>
+    <p class="help" id="settingsHelp">Landet sätts efter var du är. Du kan byta det här.</p>
+    <label for="countryPick" id="lblCountry">Land</label>
     <select id="countryPick"></select>
   </dialog>
 
@@ -153,6 +153,7 @@
         <div class="filters" role="group" id="filterGroup">
           <button type="button" data-filter="all" id="filterAll" aria-pressed="true"></button>
           <button type="button" data-filter="today" id="filterToday" aria-pressed="false"></button>
+          <button type="button" data-filter="now" id="filterNow" aria-pressed="false"></button>
         </div>
       </div>
       <p class="summary" id="listSummary"></p>

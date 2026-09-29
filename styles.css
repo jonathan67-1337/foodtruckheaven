@@ -170,6 +170,13 @@ body.placing #map, body.placing .leaflet-container { cursor: crosshair; }
 .pin-now span { background: var(--forest); }
 .pin-later span { background: var(--clay); }
 .pin-off span { background: #d9d3cb; color: var(--ink); }
+.pin i {
+  position: absolute; left: 34px; top: 2px;
+  font-style: normal; font-size: 0.72rem; font-weight: 600; line-height: 1.3;
+  color: var(--ink); background: var(--surface);
+  border: 1px solid var(--hairline); border-radius: 999px;
+  padding: 2px 7px; white-space: nowrap;
+}
 .badge { display: inline-block; margin: 0; padding: 2px 8px; border: 0; border-radius: 999px; font-size: 0.75rem; font-weight: 600; background: var(--now); color: var(--forest); }
 .side-block { margin-top: 40px; }
 .side-block h2 { margin: 0 0 8px; }
@@ -195,7 +202,7 @@ body.placing #map, body.placing .leaflet-container { cursor: crosshair; }
 .close:hover { background: #f3efe9; color: var(--ink); }
 #detailPhoto, #detailFood { width: 100%; max-height: 240px; object-fit: cover; }
 #detailFood { margin-top: 10px; }
-#settings { display: grid; gap: 10px; }
+#settings[open] { display: grid; gap: 10px; }
 footer { border-top: 1px solid var(--hairline); padding: 18px 0 28px; color: var(--muted); font-size: 0.85rem; }
 footer p { margin: 0.2rem 0; }
 
