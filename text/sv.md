@@ -18,18 +18,33 @@ Tom karta: Inga foodtrucks är inlagda i det här landet ännu.
 
 Rubrik: Marknadsför din foodtruck
 
-Brödtext: Du marknadsför din truck genom att lägga in namn, bilder, plats och öppettider. Besökare i samma land hittar dig på kartan. Besökare i ett annat land ser dig inte.
+Brödtext: Du marknadsför din truck genom att lägga in namn, bilder på trucken, bilder på maten, plats och öppettider. Besökare i samma land hittar dig på kartan. Besökare i ett annat land ser dig inte.
 
 Besökaren ser bara det du lägger in: namn, bilder, plats och öppettider.
 
 Det här ska du fylla i:
 
 - Namn
-- Bilder
+- Trucken
+- Maten
 - Plats
 - Öppettider
 
 Spara det du vill att en besökare ska se. Kartan visar inget utöver det.
+
+### Bilder
+
+Rubrik: Bilder
+
+Brödtext: Lägg upp bilder på hur trucken ser ut, och bilder på maten. Besökaren ser bara de bilder du har lagt in.
+
+Rubrik, trucken: Trucken
+
+Hjälp: Hur trucken ser ut.
+
+Rubrik, maten: Maten
+
+Hjälp: Maten du serverar.
 
 ### Favorit
 
@@ -81,8 +96,28 @@ Saknas plats eller tid: Fyll i plats och tid.
 
 Skickad: Förfrågan skickad. Trucken ser plats och tid.
 
+### Recension
+
+Rubrik: Recension
+
+Brödtext: En recension är tre bilder som besökaren själv lägger in. En på maten, en på foodtrucken och en på menyn. Ingen text, och inga andra recensioner.
+
+Steg 1, rubrik: Maten
+
+Steg 2, rubrik: Foodtrucken
+
+Steg 3, rubrik: Menyn
+
+Knapp: Skicka recension
+
+Saknas en bild: Lägg in en bild på maten, en på foodtrucken och en på menyn.
+
+Skickad: Recensionen är sparad.
+
+Tom: Ingen recension är inlagd.
+
 ## Inte på sidan
 
-Inloggning med Apple eller Google finns inte. Mejl när en favorit öppnar finns inte. Skriv inte de texterna på sidan.
+Inloggning med Apple eller Google finns inte. Mejl när en favorit öppnar finns inte. Skriv inte Fortsätt med Apple eller Fortsätt med Google.
 
-Inga påhittade trucks, menyer, priser, rabattkoder, platser eller tider. En truck syns bara om ägaren själv har lagt in den. En rabattkod syns bara för den som har trucken som favorit, och bara om ägaren har lagt in en kod.
+Inga påhittade trucks, menyer, priser, rabattkoder, platser, tider eller recensioner. En truck syns bara om ägaren själv har lagt in den. En recension syns bara om en besökare själv har lagt in de tre bilderna. En rabattkod syns bara för den som har trucken som favorit, och bara om ägaren har lagt in en kod.
