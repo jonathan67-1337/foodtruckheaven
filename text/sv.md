@@ -8,13 +8,13 @@ Sidan har två knappar högst upp: Foodtruck och Besökare.
 
 Mening: Foodtruckheaven är ett gratis sätt att marknadsföra sin foodtruck.
 
-För besökare: Hitta foodtrucks på kartan. I Sverige ser du foodtrucks i Sverige. I Norge ser du foodtrucks i Norge. Tryck på en foodtruck. Du ser namn, bilder, plats och öppettider. Det är det ägaren har lagt in.
+För besökare: Hitta foodtrucks på kartan i det land du är i. Du kan byta land i inställningarna. Tryck på en foodtruck. Du ser namn, bilder, plats och öppettider. Det är det ägaren har lagt in.
 
 För foodtrucks: Du marknadsför din foodtruck gratis genom att lägga in namn, bilder på trucken, bilder på maten, plats och öppettider. Besökare i samma land hittar dig på kartan. Besökare i ett annat land ser dig inte.
 
 Sidtitel: Foodtruckheaven. Hitta foodtrucks på kartan
 
-Beskrivning: Foodtruckheaven är ett gratis sätt att marknadsföra sin foodtruck. Besökare hittar foodtrucks på kartan i Sverige eller Norge. En foodtruck syns med namn, bilder, plats och öppettider som ägaren har lagt in.
+Beskrivning: Foodtruckheaven är ett gratis sätt att marknadsföra sin foodtruck. Besökare hittar foodtrucks på kartan i det land de är i, och kan byta land i inställningarna. En foodtruck syns med namn, bilder, plats och öppettider som ägaren har lagt in.
 
 ### Inställningar
 
@@ -28,11 +28,19 @@ Mening: Landet sätts efter var du är. Du kan byta det här.
 
 Rubrik: Hitta foodtrucks på kartan
 
-Brödtext: Foodtruckheaven är ett gratis sätt att marknadsföra sin foodtruck. Hitta foodtrucks på kartan. I Sverige ser du foodtrucks i Sverige. I Norge ser du foodtrucks i Norge.
+Brödtext: Foodtruckheaven är ett gratis sätt att marknadsföra sin foodtruck. Hitta foodtrucks på kartan i det land du är i. Du kan byta land i inställningarna.
 
 Så läser du kartan: Tryck på en truck. Du ser namn, bilder, plats och öppettider. Det är det ägaren har lagt in. Inget annat.
 
 Tom karta: Inga foodtrucks är inlagda i det här landet ännu.
+
+### Dagar på platsen
+
+En dag: Står här i 1 dag.
+
+Flera dagar: Står här i {antal} dagar.
+
+Mening: Antalet är de dagar ägaren själv har lagt in.
 
 ### Foodtruck
 

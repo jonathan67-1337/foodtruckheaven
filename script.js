@@ -12,7 +12,7 @@
     sv: {
       skip: "Hoppa till kartan",
       visitor: "Besökare",
-      tagline: "Foodtruckheaven är ett gratis sätt att marknadsföra sin foodtruck. Hitta foodtrucks på kartan. I Sverige ser du foodtrucks i Sverige. I Norge ser du foodtrucks i Norge. Tryck på en foodtruck för att se namn, bilder, plats och öppettider som ägaren har lagt in.",
+      tagline: "Foodtruckheaven är ett gratis sätt att marknadsföra sin foodtruck. Hitta foodtrucks på kartan i det land du är i. Du kan byta land i inställningarna. Tryck på en foodtruck för att se namn, bilder, plats och öppettider som ägaren har lagt in.",
       ownerTitle: "Marknadsför din foodtruck gratis",
       ownerHelp: "Du marknadsför din foodtruck gratis genom att lägga in namn, bilder på trucken, bilder på maten, plats och öppettider. Besökare i samma land hittar dig på kartan. Besökare i ett annat land ser dig inte. Besökaren ser bara det du lägger in: namn, bilder, plats och öppettider. En dag, eller många dagar framåt om du står på samma plats. På den här sidan sparas uppgifterna i den här webbläsaren.",
       name: "Namn",
@@ -99,7 +99,7 @@
       saved: "Sparad. Den syns på kartan i den här webbläsaren.",
       photoFail: "Bilden fick inte plats och sparades inte. Trucken är sparad utan bild.",
       footer: "Tryck på en truck. Du ser namn, bilder, plats och öppettider. Det är det ägaren har lagt in. Inget annat.",
-      outside: "Foodtruckheaven.com visar Sverige och Norge. Vi gissade Sverige eftersom du verkar vara någon annanstans.",
+      outside: "Foodtruckheaven är ett gratis sätt att marknadsföra sin foodtruck. Hitta foodtrucks på kartan i det land du är i. Du kan byta land i inställningarna.",
       mapLabel: "Karta över foodtrucks",
       countryLabel: "Land"
     },
