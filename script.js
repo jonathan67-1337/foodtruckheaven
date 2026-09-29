@@ -12,7 +12,7 @@
     sv: {
       skip: "Hoppa till kartan",
       visitor: "Besökare",
-      tagline: "En foodtruck marknadsför sig genom att lägga in sig själv. Du hittar den på kartan, i det land du är i. Är du i Sverige ser du trucks i Sverige. Är du i Norge ser du trucks i Norge.",
+      tagline: "Foodtruckheaven är ett gratis sätt att marknadsföra sin foodtruck. En foodtruck marknadsför sig genom att lägga in sig själv. Du hittar den på kartan, i det land du är i. Är du i Sverige ser du trucks i Sverige. Är du i Norge ser du trucks i Norge.",
       ownerTitle: "Marknadsför din foodtruck",
       ownerHelp: "Du marknadsför din truck genom att lägga in namn, bilder på trucken, bilder på maten, plats och öppettider. Besökare i samma land hittar dig på kartan. Besökare i ett annat land ser dig inte. Besökaren ser bara det du lägger in: namn, bilder, plats och öppettider. En dag, eller många dagar framåt om du står på samma plats. På den här sidan sparas uppgifterna i den här webbläsaren.",
       name: "Namn",

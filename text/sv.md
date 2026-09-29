@@ -4,11 +4,15 @@ Sidan har två knappar högst upp: Foodtruck och Besökare.
 
 ## Text på sidan
 
+### Startsidan
+
+Mening: Foodtruckheaven är ett gratis sätt att marknadsföra sin foodtruck.
+
 ### Besökare
 
 Rubrik: Hitta foodtrucken på kartan
 
-Brödtext: En foodtruck marknadsför sig genom att lägga in sig själv. Du hittar den på kartan, i det land du är i. Är du i Sverige ser du trucks i Sverige. Är du i Norge ser du trucks i Norge.
+Brödtext: Foodtruckheaven är ett gratis sätt att marknadsföra sin foodtruck. En foodtruck marknadsför sig genom att lägga in sig själv. Du hittar den på kartan, i det land du är i. Är du i Sverige ser du trucks i Sverige. Är du i Norge ser du trucks i Norge.
 
 Så läser du kartan: Tryck på en truck. Du ser namn, bilder, plats och öppettider. Det är det ägaren har lagt in. Inget annat.
 
