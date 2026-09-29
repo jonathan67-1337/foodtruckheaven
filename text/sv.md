@@ -24,6 +24,11 @@ Fält: Land
 
 Mening: Landet sätts efter var du är. Du kan byta det här.
 
+Knapp: Ändra svaren
+
+Mening: Ändra de tre svaren från första gången. Vilken av de tio, vilken stad du har närmast, och om du vill ha rabattkod.
+
+
 ### Första gången
 
 Det här är inte en inloggning. Ingen knapp för Apple eller Google.
@@ -170,6 +175,15 @@ Brödtext: Öppnar den här trucken i formuläret. Samma truck, samma fält. Ing
 
 Sparad: Ändringen är sparad. Det är samma truck som förut.
 
+### Länk till trucken
+
+Knapp: Kopiera länk
+
+Mening: Kopierar en länk till den här trucken på kartan.
+
+Kopierad: Länken är kopierad.
+
+
 ### Favorit
 
 Rubrik: Favorit
@@ -235,6 +249,15 @@ Knapp: Skicka förfrågan
 Saknas plats eller tid: Fyll i plats och tid.
 
 Skickad: Förfrågan skickad. Trucken ser plats och tid.
+
+### Förfrågningar
+
+Rubrik: Förfrågningar
+
+Mening: Här ser du förfrågningar om att komma. Varje förfrågan visar plats och tid. Inget annat.
+
+Tom: Inga förfrågningar är inlagda.
+
 
 ### Recension
 
