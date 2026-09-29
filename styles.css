@@ -15,7 +15,7 @@
   --later: #f8ebe3;
   --off: #efeae4;
   --sans: "Manrope", "Avenir Next", "Segoe UI", sans-serif;
-  --header-offset: 308px;
+  --header-offset: 420px;
 }
 
 *, *::before, *::after { box-sizing: border-box; }
@@ -130,8 +130,16 @@ input:focus-visible, select:focus-visible { outline: 2px solid var(--forest); ou
 body.placing #map, body.placing .leaflet-container { cursor: crosshair; }
 
 .layout { display: block; }
-.map-wrap { min-height: 58vh; background: #e4dfd8; }
-#map { height: 58vh; min-height: 58vh; width: 100%; background: #e4dfd8; }
+.map-wrap { position: relative; min-height: 58vh; background: #e4dfd8; }
+#map { height: 58vh; min-height: 58vh; width: 100%; background: #e4dfd8; scroll-margin-top: var(--header-offset); }
+#showMe {
+  position: absolute; z-index: 500; top: 12px; right: 12px;
+  background: var(--surface);
+}
+.map-wrap > .help {
+  position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0;
+}
 .leaflet-container { font-family: var(--sans); }
 .leaflet-popup-content-wrapper, .leaflet-popup-tip { box-shadow: 0 10px 28px rgba(26, 25, 22, 0.12); }
 .leaflet-popup-content-wrapper { border-radius: 14px; background: var(--surface); color: var(--ink); }
@@ -207,10 +215,10 @@ footer { border-top: 1px solid var(--hairline); padding: 18px 0 28px; color: var
 footer p { margin: 0.2rem 0; }
 
 @media (min-width: 900px) {
-  :root { --header-offset: 292px; }
+  :root { --header-offset: 380px; }
   .top-inner { padding: 0 28px; }
-  .layout { display: grid; grid-template-columns: minmax(0, 1fr) minmax(340px, 440px); align-items: stretch; }
-  .map-wrap, #map { height: calc(100vh - var(--header-offset)); min-height: 520px; }
+  .layout { display: grid; grid-template-columns: minmax(0, 1fr) minmax(340px, 440px); align-items: start; }
+  #map { height: calc(100vh - var(--header-offset)); min-height: 520px; }
   .list-wrap {
     width: auto; margin: 0; padding: 28px; overflow: auto;
     max-height: calc(100vh - var(--header-offset)); border-left: 1px solid var(--hairline);
@@ -243,16 +251,18 @@ footer p { margin: 0.2rem 0; }
 }
 .settings-btn { min-height: 40px; }
 .under-map {
-  width: min(1180px, calc(100% - 2 * var(--space)));
-  margin: 12px auto 0;
+  width: auto;
+  margin: 0;
+  padding: 16px 20px 8px;
   display: grid;
   gap: 8px;
+  background: var(--stone);
 }
 .under-map h2 {
   margin: 12px 0 0;
-  font-family: var(--display);
-  font-weight: 400;
-  font-size: 1.25rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  font-size: 1.15rem;
 }
 @media (min-width: 900px) {
   .under-map { grid-column: 1 / -1; }

@@ -675,7 +675,7 @@
   function renderQuiz() {
     var dlg = $("quiz");
     if (!dlg) return;
-    if (quizSaved() && !quizForce) {
+    if (!quizForce) {
       if (dlg.open) dlg.close();
       return;
     }
