@@ -42,6 +42,22 @@ Flera dagar: Står här i {antal} dagar.
 
 Mening: Antalet är de dagar ägaren själv har lagt in.
 
+### Senast inlagda foodtrucks
+
+Rubrik: Senast inlagda foodtrucks
+
+Mening: Bara foodtrucks som en ägare själv har lagt in. Nyast först.
+
+Tom: Inga foodtrucks är inlagda i det här landet ännu.
+
+### Senast inlagda rabattkoder
+
+Rubrik: Senast inlagda rabattkoder
+
+Mening: Bara koder som ägaren själv har skrivit in. Nyast först. Koden syns bara för den som har trucken som favorit. Inte på kartan, och inte för andra.
+
+Tom: Inga rabattkoder är inlagda.
+
 ### Foodtruck
 
 Rubrik: Marknadsför din foodtruck gratis
