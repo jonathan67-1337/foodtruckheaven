@@ -49,6 +49,28 @@ Nej
 
 Ja skapar ingen kod.
 
+### Första gången för foodtruck
+
+Det här är inte en inloggning. Ingen knapp för Apple eller Google. Svaren syns på den här truckens sida. Visa bara det ägaren faktiskt har svarat.
+
+Fråga 1: Vilken streetfood serverar du?
+
+Alternativ: Tacos, Pani puri, Hot dog, Waffles, Croissant, Tamales, Empanadas, Phở, Ceviche, Crêpes
+
+På sidan: Visa de sorter ägaren har valt. Har ägaren inte valt någon, skriv inget.
+
+Fråga 2: Skriv en kort rad om trucken.
+
+Fält: En kort rad om trucken
+
+På sidan: Visa raden precis som ägaren skrev den. Har ägaren inte skrivit något, skriv inget.
+
+Fråga 3: Vilken stad står du oftast i?
+
+Alternativen är stadsnamn från stadsregistret för landet trucken är i. Högst tio. Finns färre, visa bara dem. Inga påhittade städer.
+
+På sidan: Står oftast i {stad}. Har ägaren inte valt någon stad, skriv inget.
+
 ### Besökare
 
 Rubrik: Hitta foodtrucks på kartan
@@ -274,6 +296,22 @@ För besökare:
 Länktext: Google-recensioner
 
 Mening: Länken är den ägaren själv har klistrat in. Ingen recensionstext och inget betyg.
+
+### Hemsida
+
+För foodtruck:
+
+Fält: Länk till din hemsida
+
+Hjälp: Klistra in länken till din egen hemsida. Lämna tomt om du inte har någon.
+
+Tomt fält: Besökaren ser ingen länk, och sidan skriver inget om det.
+
+För besökare:
+
+Länktext: Hemsida
+
+Mening: Länken är den ägaren själv har klistrat in.
 
 ### Recension
 
