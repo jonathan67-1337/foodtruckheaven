@@ -24,6 +24,26 @@ Fält: Land
 
 Mening: Landet sätts efter var du är. Du kan byta det här.
 
+### Första gången
+
+Det här är inte en inloggning. Ingen knapp för Apple eller Google.
+
+Fråga 1: Vilken av de här tio?
+
+Alternativ: Tacos, Pani puri, Hot dog, Waffles, Croissant, Tamales, Empanadas, Phở, Ceviche, Crêpes
+
+Fråga 2: Vilken stad har du närmast?
+
+Alternativen är stadsnamn från stadsregistret för landet besökaren är i. Högst tio. Finns färre, visa bara dem. Inga påhittade städer.
+
+Fråga 3: Vill du ha rabattkod?
+
+Ja
+
+Nej
+
+Ja skapar ingen kod.
+
 ### Besökare
 
 Rubrik: Hitta foodtrucks på kartan
