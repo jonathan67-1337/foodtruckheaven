@@ -299,3 +299,16 @@ footer p { margin: 0.2rem 0; }
 .truck:has(.thumb) .meta { color: rgba(255, 255, 255, 0.9); }
 .truck:has(.thumb):hover { background: var(--off); }
 #codeSection[hidden] { display: none; }
+
+.quiz { width: min(560px, calc(100% - 24px)); }
+.quiz-q { display: flex; flex-wrap: wrap; gap: 8px; margin: 0 0 14px; }
+.quiz-opt, .checkline {
+  border: 1px solid var(--hairline);
+  background: var(--surface);
+  border-radius: 999px;
+  padding: 8px 12px;
+  font-weight: 600;
+}
+.quiz-opt[aria-pressed="true"] { background: var(--forest); color: #fff; border-color: var(--forest); }
+.checkline { display: inline-flex; gap: 6px; margin: 0 8px 8px 0; align-items: center; }
+#foodChecks { display: flex; flex-wrap: wrap; }

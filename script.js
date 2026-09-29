@@ -222,6 +222,12 @@
 
   var boundsByCode = null;
   var citiesByCountry = null;
+  var FOODS = ["Tacos", "Pani puri", "Hot dog", "Waffles", "Croissant", "Tamales", "Empanadas", "Phở", "Ceviche", "Crêpes"];
+  var STORAGE_QUIZ = "foodtruckheaven.quiz.v1";
+  var STORAGE_OWNER_ASKED = "foodtruckheaven.ownerAsked.v1";
+  var quizPick = { food: "", city: "", discount: "" };
+  var quizForce = false;
+  var ownerPick = { foods: [], line: "", city: "" };
 
   var state = {
     country: "",
@@ -233,7 +239,8 @@
     pin: null,
     truckPhoto: null,
     foodPhoto: null,
-    outside: false
+    outside: false,
+    foodFilter: ""
   };
 
   var map;
@@ -581,6 +588,166 @@
       focusMap(point || null);
       render();
     }
+    renderQuiz();
+    renderOwnerCities();
+  }
+
+
+  function httpUrl(value) {
+    var s = String(value || "").trim();
+    if (!/^https?:\/\//i.test(s)) return "";
+    try {
+      var u = new URL(s);
+      if (u.protocol !== "http:" && u.protocol !== "https:") return "";
+      return u.toString();
+    } catch (e) { return ""; }
+  }
+  function isSoldToday(tr) {
+    return !!(tr && tr.soldOut && tr.soldOut === isoDate(new Date()));
+  }
+  function cityNamesFor(country) {
+    var list = citiesByCountry && country && citiesByCountry[country];
+    if (!list || !list.length) return [];
+    return list.slice(0, 10).map(function (c) { return c.n; });
+  }
+  function selectedFoods() {
+    var out = [];
+    document.querySelectorAll("#foodChecks input:checked").forEach(function (el) {
+      if (FOODS.indexOf(el.value) !== -1) out.push(el.value);
+    });
+    return out;
+  }
+  function setFoodChecks(list) {
+    document.querySelectorAll("#foodChecks input").forEach(function (el) {
+      el.checked = list.indexOf(el.value) !== -1;
+    });
+  }
+  function buildFoodChecks() {
+    var box = $("foodChecks");
+    if (!box || box.childNodes.length) return;
+    FOODS.forEach(function (name) {
+      var label = document.createElement("label");
+      label.className = "checkline";
+      var input = document.createElement("input");
+      input.type = "checkbox";
+      input.value = name;
+      label.appendChild(input);
+      label.appendChild(document.createTextNode(" " + name));
+      box.appendChild(label);
+    });
+  }
+  function renderFoodFilter() {
+    var box = $("foodFilter");
+    if (!box) return;
+    box.textContent = "";
+    FOODS.forEach(function (name) {
+      var btn = document.createElement("button");
+      btn.type = "button";
+      btn.textContent = name;
+      btn.setAttribute("aria-pressed", state.foodFilter === name ? "true" : "false");
+      btn.addEventListener("click", function () {
+        state.foodFilter = state.foodFilter === name ? "" : name;
+        render();
+      });
+      box.appendChild(btn);
+    });
+  }
+  function paintChoices(box, values, picked, onPick) {
+    if (!box) return;
+    box.textContent = "";
+    values.forEach(function (value) {
+      var btn = document.createElement("button");
+      btn.type = "button";
+      btn.className = "quiz-opt";
+      btn.textContent = value;
+      var on = Array.isArray(picked) ? picked.indexOf(value) !== -1 : value === picked;
+      btn.setAttribute("aria-pressed", on ? "true" : "false");
+      btn.addEventListener("click", function () { onPick(value); });
+      box.appendChild(btn);
+    });
+  }
+  function quizSaved() {
+    try {
+      var q = JSON.parse(localStorage.getItem(STORAGE_QUIZ) || "null");
+      return !!(q && FOODS.indexOf(q.food) !== -1 && q.city && (q.discount === "Ja" || q.discount === "Nej"));
+    } catch (e) { return false; }
+  }
+  function renderQuiz() {
+    var dlg = $("quiz");
+    if (!dlg) return;
+    if (quizSaved() && !quizForce) {
+      if (dlg.open) dlg.close();
+      return;
+    }
+    var cities = cityNamesFor(state.country);
+    if (quizPick.city && cities.indexOf(quizPick.city) === -1) quizPick.city = "";
+    paintChoices($("quizFood"), FOODS, quizPick.food, function (value) {
+      quizPick.food = value;
+      tryFinishQuiz();
+    });
+    paintChoices($("quizCity"), cities, quizPick.city, function (value) {
+      quizPick.city = value;
+      tryFinishQuiz();
+    });
+    paintChoices($("quizCode"), ["Ja", "Nej"], quizPick.discount, function (value) {
+      quizPick.discount = value;
+      tryFinishQuiz();
+    });
+    if (!dlg.open) dlg.showModal();
+  }
+  function tryFinishQuiz() {
+    var cities = cityNamesFor(state.country);
+    if (FOODS.indexOf(quizPick.food) === -1 || cities.indexOf(quizPick.city) === -1) { renderQuiz(); return; }
+    if (quizPick.discount !== "Ja" && quizPick.discount !== "Nej") { renderQuiz(); return; }
+    localStorage.setItem(STORAGE_QUIZ, JSON.stringify({
+      food: quizPick.food,
+      city: quizPick.city,
+      discount: quizPick.discount
+    }));
+    quizForce = false;
+    var dlg = $("quiz");
+    if (dlg.open) dlg.close();
+  }
+  function renderOwnerCities() {
+    var box = $("oqCity");
+    if (!box) return;
+    var cities = cityNamesFor(state.country);
+    if (ownerPick.city && cities.indexOf(ownerPick.city) === -1) ownerPick.city = "";
+    paintChoices(box, cities, ownerPick.city, function (value) {
+      ownerPick.city = ownerPick.city === value ? "" : value;
+      renderOwnerCities();
+    });
+  }
+  function renderOwnerFoods() {
+    paintChoices($("oqFood"), FOODS, ownerPick.foods, function (value) {
+      var i = ownerPick.foods.indexOf(value);
+      if (i === -1) ownerPick.foods.push(value);
+      else ownerPick.foods.splice(i, 1);
+      renderOwnerFoods();
+    });
+  }
+  function openOwnerQuiz() {
+    ownerPick.foods = [];
+    ownerPick.line = "";
+    ownerPick.city = "";
+    if ($("oqLine")) $("oqLine").value = "";
+    renderOwnerFoods();
+    renderOwnerCities();
+    var dlg = $("ownerQuiz");
+    if (dlg && !dlg.open) dlg.showModal();
+  }
+  function ownerAlreadyAsked() {
+    try { return localStorage.getItem(STORAGE_OWNER_ASKED) === "1"; } catch (e) { return false; }
+  }
+  function openFromHash() {
+    var m = /^#truck=(.+)$/.exec(location.hash || "");
+    if (!m || !map) return;
+    var id = decodeURIComponent(m[1]);
+    var tr = null;
+    allTrucks().forEach(function (item) { if (item.id === id) tr = item; });
+    if (!tr) return;
+    map.setView([tr.lat, tr.lng], 14);
+    openDetail(tr);
   }
 
   function setMode(mode) {
@@ -610,6 +777,11 @@
       list = list.filter(function (tr) { return isOpenOnDay(tr, now); });
     } else if (state.filter === "now") {
       list = list.filter(function (tr) { return statusOf(tr, now) === "now"; });
+    }
+    if (state.foodFilter) {
+      list = list.filter(function (tr) {
+        return Array.isArray(tr.foods) && tr.foods.indexOf(state.foodFilter) !== -1;
+      });
     }
     list.sort(function (a, b) {
       var order = { now: 0, later: 1, off: 2 };
@@ -719,14 +891,25 @@
       li.appendChild(fav);
       ul.appendChild(li);
     });
+    var foodEmpty = $("foodFilterEmpty");
+    if (foodEmpty) foodEmpty.hidden = !(state.foodFilter && !list.length);
+    renderFoodFilter();
     renderUnderMap();
   }
   function renderUnderMap() {
     var trucks = newestFirst(inCountry(allTrucks()));
+    var q = ($("recentSearch") && $("recentSearch").value || "").trim().toLowerCase();
+    if (q) {
+      trucks = trucks.filter(function (tr) {
+        return (tr.name || "").toLowerCase().indexOf(q) !== -1 || (tr.city || "").toLowerCase().indexOf(q) !== -1;
+      });
+    }
+    var searchEmpty = $("recentSearchEmpty");
+    if (searchEmpty) searchEmpty.hidden = !(q && !trucks.length);
     var recent = $("recentList");
     var recentEmpty = $("recentEmpty");
     recent.textContent = "";
-    recentEmpty.hidden = trucks.length > 0;
+    recentEmpty.hidden = trucks.length > 0 || !!q;
     trucks.forEach(function (tr) {
       var li = document.createElement("li");
       var btn = document.createElement("button");
@@ -836,6 +1019,49 @@
     var days = dayLines(tr);
     $("detailDays").textContent = days ? days.count : "";
     $("detailDaysNote").textContent = days ? days.note : "";
+    var sold = isSoldToday(tr);
+    $("detailSold").hidden = !sold;
+    var foodsBox = $("detailFoods");
+    foodsBox.textContent = "";
+    (tr.foods || []).forEach(function (name) {
+      if (FOODS.indexOf(name) === -1) return;
+      var p = document.createElement("p");
+      p.textContent = name;
+      foodsBox.appendChild(p);
+    });
+    $("detailLine").textContent = tr.blurb ? String(tr.blurb) : "";
+    $("detailUsual").textContent = tr.usualCity ? ("Står oftast i " + tr.usualCity + ".") : "";
+    var g = httpUrl(tr.googleUrl);
+    $("googleLink").hidden = !g;
+    $("googleNote").hidden = !g;
+    if (g) $("googleLink").href = g;
+    var site = httpUrl(tr.siteUrl);
+    $("siteLink").hidden = !site;
+    $("siteNote").hidden = !site;
+    if (site) $("siteLink").href = site;
+    $("detailDir").href = "https://www.google.com/maps/dir/?api=1&destination=" + encodeURIComponent(tr.lat + "," + tr.lng);
+    $("copyDone").hidden = true;
+    $("copyLink").onclick = function () {
+      var link = "https://jonathan67-1337.github.io/foodtruckheaven/#truck=" + encodeURIComponent(tr.id);
+      var done = function () { $("copyDone").hidden = false; };
+      if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(link).then(done).catch(function () {});
+    };
+    var ownTruckEarly = isOwnId(tr.id);
+    $("soldWrap").hidden = !ownTruckEarly;
+    $("soldOwnerNote").hidden = !ownTruckEarly;
+    $("detailSoldBox").checked = sold;
+    $("detailSoldBox").onchange = function () {
+      var own = loadOwn();
+      own = own.map(function (item) {
+        if (item.id !== tr.id) return item;
+        item.soldOut = $("detailSoldBox").checked ? isoDate(new Date()) : "";
+        tr = item;
+        return item;
+      });
+      saveOwn(own);
+      render();
+      openDetail(tr);
+    };
     var edit = $("detailEdit");
     var editHelp = $("detailEditHelp");
     var ownTruck = isOwnId(tr.id);
@@ -972,6 +1198,12 @@
       code: $("truckCode").value.trim(),
       hours: { from: from, to: to },
       dates: dates,
+      foods: (existing || selectedFoods().length) ? selectedFoods() : ownerPick.foods.slice(),
+      blurb: existing ? (existing.blurb || "") : (($("oqLine") && $("oqLine").value.trim()) || ownerPick.line || ""),
+      usualCity: existing ? (existing.usualCity || "") : (ownerPick.city || ""),
+      googleUrl: httpUrl($("googleUrl").value),
+      siteUrl: httpUrl($("siteUrl").value),
+      soldOut: $("soldOut").checked ? isoDate(new Date()) : "",
       demo: false
     };
 
@@ -1065,6 +1297,10 @@
     $("truckName").value = tr.name;
     $("truckCity").value = tr.city || "";
     $("truckCode").value = tr.code || "";
+    $("googleUrl").value = tr.googleUrl || "";
+    $("siteUrl").value = tr.siteUrl || "";
+    $("soldOut").checked = isSoldToday(tr);
+    setFoodChecks(tr.foods || []);
     $("openFrom").value = tr.hours.from;
     $("openTo").value = tr.hours.to;
     state.pin = { lat: tr.lat, lng: tr.lng };
@@ -1174,9 +1410,16 @@
     asks.forEach(function (a) {
       if (!ownIds[a.truckId]) return;
       var li = document.createElement("li");
-      li.textContent = a.place + " · " + a.time;
+      var place = document.createElement("div");
+      place.textContent = a.place;
+      var time = document.createElement("div");
+      time.textContent = a.time;
+      li.appendChild(place);
+      li.appendChild(time);
       ownerList.appendChild(li);
     });
+    var askEmpty = $("askEmpty");
+    if (askEmpty) askEmpty.hidden = ownerList.children.length > 0;
 
     var revEmpty = $("revEmpty");
     var revList = $("revList");
@@ -1278,6 +1521,7 @@
     end.setDate(end.getDate() + 6);
     $("endDate").value = isoDate(end);
 
+    buildFoodChecks();
     $("btnOwner").addEventListener("click", function () {
       if (state.editingId) {
         state.editingId = null;
@@ -1295,9 +1539,38 @@
         $("formError").textContent = "";
       }
       setMode("owner");
+      if (!state.editingId && !ownerAlreadyAsked()) openOwnerQuiz();
     });
     $("btnVisitor").addEventListener("click", function () { setMode("visitor"); });
     $("openSettings").addEventListener("click", function () { $("settings").showModal(); });
+    $("editAnswers").addEventListener("click", function () {
+      quizForce = true;
+      try {
+        var q = JSON.parse(localStorage.getItem(STORAGE_QUIZ) || "null");
+        if (q) { quizPick.food = q.food || ""; quizPick.city = q.city || ""; quizPick.discount = q.discount || ""; }
+      } catch (e) {}
+      $("settings").close();
+      renderQuiz();
+    });
+    $("oqDone").addEventListener("click", function () {
+      ownerPick.line = $("oqLine").value.trim();
+      try { localStorage.setItem(STORAGE_OWNER_ASKED, "1"); } catch (e) {}
+      setFoodChecks(ownerPick.foods);
+      var dlg = $("ownerQuiz");
+      if (dlg.open) dlg.close();
+    });
+    $("recentSearch").addEventListener("input", function () { renderUnderMap(); });
+    $("showMe").addEventListener("click", function () {
+      if (!navigator.geolocation || !map) return;
+      navigator.geolocation.getCurrentPosition(function (pos) {
+        map.setView([pos.coords.latitude, pos.coords.longitude], 14);
+      }, function () {});
+    });
+    var quizDlg = $("quiz");
+    if (quizDlg) quizDlg.addEventListener("cancel", function (ev) {
+      if (!quizSaved()) ev.preventDefault();
+    });
+    window.addEventListener("hashchange", openFromHash);
     $("settingsClose").addEventListener("click", function () { $("settings").close(); });
     $("settings").addEventListener("click", function (ev) { if (ev.target === $("settings")) $("settings").close(); });
     $("countryPick").addEventListener("change", function () {
@@ -1370,6 +1643,10 @@
       render();
       var dlg = $("settings");
       if (dlg && dlg.showModal) dlg.showModal();
+    }).then(function () {
+      buildFoodChecks();
+      renderQuiz();
+      openFromHash();
     });
   }
 
