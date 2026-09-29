@@ -231,7 +231,7 @@ body.placing .leaflet-container { cursor: crosshair; }
   justify-content: space-between;
   gap: 10px;
 }
-.list-head h2 {
+.list-head h1 {
   margin: 0;
   font-family: var(--display);
   font-weight: 400;

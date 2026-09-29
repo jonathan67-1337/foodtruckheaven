@@ -5,12 +5,24 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Foodtruckheaven. Hitta foodtrucks på kartan</title>
   <meta name="description" content="Foodtruckheaven är ett gratis sätt att marknadsföra sin foodtruck. Besökare hittar foodtrucks på kartan i det land de är i, och kan byta land i inställningarna. En foodtruck syns med namn, bilder, plats och öppettider som ägaren har lagt in.">
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="sv_SE">
+  <meta property="og:site_name" content="Foodtruckheaven">
+  <meta property="og:title" content="Foodtruckheaven. Hitta foodtrucks på kartan">
+  <meta property="og:description" content="Foodtruckheaven är ett gratis sätt att marknadsföra sin foodtruck. Besökare hittar foodtrucks på kartan i det land de är i, och kan byta land i inställningarna. En foodtruck syns med namn, bilder, plats och öppettider som ägaren har lagt in.">
+  <meta property="og:url" content="https://jonathan67-1337.github.io/foodtruckheaven/">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Foodtruckheaven. Hitta foodtrucks på kartan">
+  <meta name="twitter:description" content="Foodtruckheaven är ett gratis sätt att marknadsföra sin foodtruck. Besökare hittar foodtrucks på kartan i det land de är i, och kan byta land i inställningarna. En foodtruck syns med namn, bilder, plats och öppettider som ägaren har lagt in.">
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"WebSite","name":"Foodtruckheaven","url":"https://jonathan67-1337.github.io/foodtruckheaven/","inLanguage":"sv","description":"Foodtruckheaven är ett gratis sätt att marknadsföra sin foodtruck. Besökare hittar foodtrucks på kartan i det land de är i, och kan byta land i inställningarna. En foodtruck syns med namn, bilder, plats och öppettider som ägaren har lagt in."}
+  </script>
   <link rel="canonical" href="https://jonathan67-1337.github.io/foodtruckheaven/">
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
-  <meta name="theme-color" content="#f4efe6">
+  <meta name="theme-color" content="#f6f4f1">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Bowlby+One&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
   <link rel="stylesheet" href="styles.css">
 </head>
@@ -118,7 +130,7 @@
     </section>
     <aside class="list-wrap" aria-labelledby="listHeading">
       <div class="list-head">
-        <h2 id="listHeading"></h2>
+        <h1 id="listHeading">Hitta foodtrucks på kartan</h1>
         <div class="filters" role="group" id="filterGroup">
           <button type="button" data-filter="all" id="filterAll" aria-pressed="true"></button>
           <button type="button" data-filter="today" id="filterToday" aria-pressed="false"></button>
@@ -194,6 +206,11 @@
       <p>Foodtruckheaven.com</p>
     </div>
   </footer>
+
+  <noscript>
+    <p>Foodtruckheaven är ett gratis sätt att marknadsföra sin foodtruck. Besökare hittar foodtrucks på kartan i det land de är i, och kan byta land i inställningarna. En foodtruck syns med namn, bilder, plats och öppettider som ägaren har lagt in.</p>
+    <p>Marknadsför din foodtruck gratis. Besökare i samma land hittar dig på kartan. Besökare i ett annat land ser dig inte.</p>
+  </noscript>
 
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
   <script src="script.js"></script>

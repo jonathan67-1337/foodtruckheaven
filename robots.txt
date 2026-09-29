@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://jonathan67-1337.github.io/foodtruckheaven/sitemap.xml
