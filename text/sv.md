@@ -259,6 +259,22 @@ Mening: Här ser du förfrågningar om att komma. Varje förfrågan visar plats 
 Tom: Inga förfrågningar är inlagda.
 
 
+### Google-recensioner
+
+För foodtruck:
+
+Fält: Länk till Google-recensioner
+
+Hjälp: Klistra in länken till dina Google-recensioner. Lämna tomt om du inte har någon.
+
+Tomt fält: Besökaren ser ingen länk, och sidan skriver inget om det.
+
+För besökare:
+
+Länktext: Google-recensioner
+
+Mening: Länken är den ägaren själv har klistrat in. Ingen recensionstext och inget betyg.
+
 ### Recension
 
 Rubrik: Recension
