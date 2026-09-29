@@ -46,6 +46,14 @@ Rubrik, maten: Maten
 
 Hjälp: Maten du serverar.
 
+### Ändra truck
+
+Knapp: Ändra truck
+
+Brödtext: Öppnar den här trucken i formuläret. Samma truck, samma fält. Ingen ny truck.
+
+Sparad: Ändringen är sparad. Det är samma truck som förut.
+
 ### Favorit
 
 Rubrik: Favorit
@@ -136,4 +144,4 @@ Tom: Ingen recension är inlagd.
 
 Inloggning med Apple eller Google finns inte. Mejl när en favorit öppnar finns inte. Skriv inte Fortsätt med Apple eller Fortsätt med Google.
 
-Inga påhittade trucks, menyer, priser, rabattkoder, platser, tider eller recensioner. En förfrågan om rabattkod skapar ingen kod. En truck syns bara om ägaren själv har lagt in den. En recension syns bara om en besökare själv har lagt in de tre bilderna. En rabattkod syns bara för den som har trucken som favorit, och bara om ägaren har lagt in en kod.
+Inga påhittade trucks, menyer, priser, rabattkoder, platser, tider eller recensioner. En förfrågan om rabattkod skapar ingen kod. En truck syns bara om ägaren själv har lagt in den. Att ändra en truck skapar ingen ny truck, inget nytt omdöme och ingen ny kod. En recension syns bara om en besökare själv har lagt in de tre bilderna. En rabattkod syns bara för den som har trucken som favorit, och bara om ägaren har lagt in en kod.
