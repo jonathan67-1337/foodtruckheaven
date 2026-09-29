@@ -16,6 +16,14 @@ Sidtitel: Foodtruckheaven. Hitta foodtrucks på kartan
 
 Beskrivning: Foodtruckheaven är ett gratis sätt att marknadsföra sin foodtruck. Besökare hittar foodtrucks på kartan i Sverige eller Norge. En foodtruck syns med namn, bilder, plats och öppettider som ägaren har lagt in.
 
+### Inställningar
+
+Knapp: Inställningar
+
+Fält: Land
+
+Mening: Landet sätts efter var du är. Du kan byta det här.
+
 ### Besökare
 
 Rubrik: Hitta foodtrucks på kartan
