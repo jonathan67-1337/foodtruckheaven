@@ -80,6 +80,22 @@ Tom: Ingen rabattkod är inlagd.
 
 För andra besökare: visa inte koden, och skriv inte ut den på kartan.
 
+### Be om rabattkod
+
+Rubrik: Be om rabattkod
+
+Brödtext: Fyll i när du tänker besöka trucken. Knappen går att använda bara när besöket är inom 60 minuter. Inte tidigare, och inte efter tiden. Förfrågan skapar ingen kod. Ser du en kod är det en kod ägaren själv har skrivit in, och den syns bara om du har trucken som favorit.
+
+Fält: Tid för besöket
+
+Knapp: Be om rabattkod
+
+För tidigt: Det är för tidigt. Du kan be om en rabattkod tidigast 60 minuter före besöket.
+
+För sent: Tiden har passerat. Du kan be om en rabattkod bara inom 60 minuter före besöket.
+
+Skickad: Förfrågan är skickad. Den skapar ingen kod. Ser du en kod är det en kod ägaren själv har skrivit in, och den syns bara om du har trucken som favorit.
+
 ### Förfrågan
 
 Rubrik: Be trucken komma
@@ -120,4 +136,4 @@ Tom: Ingen recension är inlagd.
 
 Inloggning med Apple eller Google finns inte. Mejl när en favorit öppnar finns inte. Skriv inte Fortsätt med Apple eller Fortsätt med Google.
 
-Inga påhittade trucks, menyer, priser, rabattkoder, platser, tider eller recensioner. En truck syns bara om ägaren själv har lagt in den. En recension syns bara om en besökare själv har lagt in de tre bilderna. En rabattkod syns bara för den som har trucken som favorit, och bara om ägaren har lagt in en kod.
+Inga påhittade trucks, menyer, priser, rabattkoder, platser, tider eller recensioner. En förfrågan om rabattkod skapar ingen kod. En truck syns bara om ägaren själv har lagt in den. En recension syns bara om en besökare själv har lagt in de tre bilderna. En rabattkod syns bara för den som har trucken som favorit, och bara om ägaren har lagt in en kod.
