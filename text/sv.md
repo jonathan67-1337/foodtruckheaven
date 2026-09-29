@@ -8,11 +8,19 @@ Sidan har två knappar högst upp: Foodtruck och Besökare.
 
 Mening: Foodtruckheaven är ett gratis sätt att marknadsföra sin foodtruck.
 
+För besökare: Hitta foodtrucks på kartan. I Sverige ser du foodtrucks i Sverige. I Norge ser du foodtrucks i Norge. Tryck på en foodtruck. Du ser namn, bilder, plats och öppettider. Det är det ägaren har lagt in.
+
+För foodtrucks: Du marknadsför din foodtruck gratis genom att lägga in namn, bilder på trucken, bilder på maten, plats och öppettider. Besökare i samma land hittar dig på kartan. Besökare i ett annat land ser dig inte.
+
+Sidtitel: Foodtruckheaven. Hitta foodtrucks på kartan
+
+Beskrivning: Foodtruckheaven är ett gratis sätt att marknadsföra sin foodtruck. Besökare hittar foodtrucks på kartan i Sverige eller Norge. En foodtruck syns med namn, bilder, plats och öppettider som ägaren har lagt in.
+
 ### Besökare
 
-Rubrik: Hitta foodtrucken på kartan
+Rubrik: Hitta foodtrucks på kartan
 
-Brödtext: Foodtruckheaven är ett gratis sätt att marknadsföra sin foodtruck. En foodtruck marknadsför sig genom att lägga in sig själv. Du hittar den på kartan, i det land du är i. Är du i Sverige ser du trucks i Sverige. Är du i Norge ser du trucks i Norge.
+Brödtext: Foodtruckheaven är ett gratis sätt att marknadsföra sin foodtruck. Hitta foodtrucks på kartan. I Sverige ser du foodtrucks i Sverige. I Norge ser du foodtrucks i Norge.
 
 Så läser du kartan: Tryck på en truck. Du ser namn, bilder, plats och öppettider. Det är det ägaren har lagt in. Inget annat.
 
@@ -20,9 +28,9 @@ Tom karta: Inga foodtrucks är inlagda i det här landet ännu.
 
 ### Foodtruck
 
-Rubrik: Marknadsför din foodtruck
+Rubrik: Marknadsför din foodtruck gratis
 
-Brödtext: Du marknadsför din truck genom att lägga in namn, bilder på trucken, bilder på maten, plats och öppettider. Besökare i samma land hittar dig på kartan. Besökare i ett annat land ser dig inte.
+Brödtext: Du marknadsför din foodtruck gratis genom att lägga in namn, bilder på trucken, bilder på maten, plats och öppettider. Besökare i samma land hittar dig på kartan. Besökare i ett annat land ser dig inte.
 
 Besökaren ser bara det du lägger in: namn, bilder, plats och öppettider.
 

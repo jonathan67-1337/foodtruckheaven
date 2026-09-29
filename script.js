@@ -12,9 +12,9 @@
     sv: {
       skip: "Hoppa till kartan",
       visitor: "Besökare",
-      tagline: "Foodtruckheaven är ett gratis sätt att marknadsföra sin foodtruck. En foodtruck marknadsför sig genom att lägga in sig själv. Du hittar den på kartan, i det land du är i. Är du i Sverige ser du trucks i Sverige. Är du i Norge ser du trucks i Norge.",
-      ownerTitle: "Marknadsför din foodtruck",
-      ownerHelp: "Du marknadsför din truck genom att lägga in namn, bilder på trucken, bilder på maten, plats och öppettider. Besökare i samma land hittar dig på kartan. Besökare i ett annat land ser dig inte. Besökaren ser bara det du lägger in: namn, bilder, plats och öppettider. En dag, eller många dagar framåt om du står på samma plats. På den här sidan sparas uppgifterna i den här webbläsaren.",
+      tagline: "Foodtruckheaven är ett gratis sätt att marknadsföra sin foodtruck. Hitta foodtrucks på kartan. I Sverige ser du foodtrucks i Sverige. I Norge ser du foodtrucks i Norge. Tryck på en foodtruck för att se namn, bilder, plats och öppettider som ägaren har lagt in.",
+      ownerTitle: "Marknadsför din foodtruck gratis",
+      ownerHelp: "Du marknadsför din foodtruck gratis genom att lägga in namn, bilder på trucken, bilder på maten, plats och öppettider. Besökare i samma land hittar dig på kartan. Besökare i ett annat land ser dig inte. Besökaren ser bara det du lägger in: namn, bilder, plats och öppettider. En dag, eller många dagar framåt om du står på samma plats. På den här sidan sparas uppgifterna i den här webbläsaren.",
       name: "Namn",
       photoHeading: "Bilder",
       photoIntro: "Lägg upp bilder på hur trucken ser ut, och bilder på maten. Besökaren ser bara de bilder du har lagt in.",
@@ -71,7 +71,7 @@
       cancel: "Avbryt",
       place: "Klicka på kartan där trucken står.",
       placeCancel: "Avbryt",
-      listAll: "Hitta foodtrucken på kartan",
+      listAll: "Hitta foodtrucks på kartan",
       listToday: "Ute idag",
       filterAll: "Alla",
       filterToday: "Idag",
@@ -328,7 +328,7 @@
 
   function applyCopy() {
     document.documentElement.lang = state.lang === "nb" ? "nb" : "sv";
-    document.title = "Foodtruckheaven.com";
+    document.title = state.lang === "nb" ? "Foodtruckheaven.com" : "Foodtruckheaven. Hitta foodtrucks på kartan";
     $("skipLink").textContent = t("skip");
     $("btnVisitor").textContent = t("visitor");
     $("tagline").textContent = state.outside ? t("outside") : t("tagline");
