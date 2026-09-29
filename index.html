@@ -40,6 +40,7 @@
         <button type="button" class="choice owner" id="btnOwner">Foodtruck</button>
         <button type="button" class="choice visitor" id="btnVisitor" aria-pressed="true">Besökare</button>
       </div>
+      <h1 class="page-title" id="listHeading">Hitta foodtrucks på kartan</h1>
       <h2 class="owner-pitch" id="ownerPitch">Marknadsför din foodtruck gratis</h2>
       <div class="cities" id="cityRow"></div>
       <p class="tagline" id="tagline"></p>
@@ -139,15 +140,16 @@
         <p class="help">Bara foodtrucks som en ägare själv har lagt in. Nyast först.</p>
         <p class="summary" id="recentEmpty">Inga foodtrucks är inlagda i det här landet ännu.</p>
         <ul class="trucks" id="recentList"></ul>
-        <h2>Senast inlagda rabattkoder</h2>
-        <p class="help">Bara koder som ägaren själv har skrivit in. Nyast först. Koden syns bara för den som har trucken som favorit. Inte på kartan, och inte för andra.</p>
-        <p class="summary" id="codeListEmpty">Inga rabattkoder är inlagda.</p>
-        <ul class="trucks" id="codeList"></ul>
+        <section id="codeSection" hidden>
+          <h2>Senast inlagda rabattkoder</h2>
+          <p class="help">Bara koder som ägaren själv har skrivit in. Nyast först. Koden syns bara för den som har trucken som favorit. Inte på kartan, och inte för andra.</p>
+          <p class="summary" id="codeListEmpty" hidden>Inga rabattkoder är inlagda.</p>
+          <ul class="trucks" id="codeList"></ul>
+        </section>
       </div>
     </section>
     <aside class="list-wrap" aria-labelledby="listHeading">
       <div class="list-head">
-        <h1 id="listHeading">Hitta foodtrucks på kartan</h1>
         <div class="filters" role="group" id="filterGroup">
           <button type="button" data-filter="all" id="filterAll" aria-pressed="true"></button>
           <button type="button" data-filter="today" id="filterToday" aria-pressed="false"></button>

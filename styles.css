@@ -15,7 +15,7 @@
   --later: #f8ebe3;
   --off: #efeae4;
   --sans: "Manrope", "Avenir Next", "Segoe UI", sans-serif;
-  --header-offset: 252px;
+  --header-offset: 308px;
 }
 
 *, *::before, *::after { box-sizing: border-box; }
@@ -200,7 +200,7 @@ footer { border-top: 1px solid var(--hairline); padding: 18px 0 28px; color: var
 footer p { margin: 0.2rem 0; }
 
 @media (min-width: 900px) {
-  :root { --header-offset: 236px; }
+  :root { --header-offset: 292px; }
   .top-inner { padding: 0 28px; }
   .layout { display: grid; grid-template-columns: minmax(0, 1fr) minmax(340px, 440px); align-items: stretch; }
   .map-wrap, #map { height: calc(100vh - var(--header-offset)); min-height: 520px; }
@@ -250,3 +250,45 @@ footer p { margin: 0.2rem 0; }
 @media (min-width: 900px) {
   .under-map { grid-column: 1 / -1; }
 }
+
+.page-title {
+  margin: 18px 0 0;
+  font-size: clamp(1.55rem, 1.15rem + 1.5vw, 2.1rem);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 1.15;
+}
+.truck:has(.thumb) {
+  position: relative;
+  display: block;
+  min-height: 180px;
+  padding: 0;
+  overflow: hidden;
+  background: var(--off);
+}
+.truck:has(.thumb) .thumb {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  flex: none;
+  border-radius: 0;
+  object-fit: cover;
+}
+.truck:has(.thumb) .thumb.ph {
+  font-size: 2.5rem;
+  color: rgba(26, 25, 22, 0.28);
+}
+.truck:has(.thumb) > div {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1;
+  padding: 52px 14px 14px;
+  background: linear-gradient(to top, rgba(26, 25, 22, 0.78), rgba(26, 25, 22, 0));
+}
+.truck:has(.thumb) h3 { color: #fff; font-size: 1.25rem; }
+.truck:has(.thumb) .meta { color: rgba(255, 255, 255, 0.9); }
+.truck:has(.thumb):hover { background: var(--off); }
+#codeSection[hidden] { display: none; }

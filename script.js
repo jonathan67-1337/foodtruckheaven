@@ -533,6 +533,19 @@
     });
   }
 
+  function truckFace(tr) {
+    var letter = safeLetter(tr.name);
+    var thumb = document.createElement(tr.photo ? "img" : "div");
+    thumb.className = "thumb" + (tr.photo ? "" : " ph");
+    if (tr.photo) {
+      thumb.src = tr.photo;
+      thumb.alt = "";
+    } else {
+      thumb.textContent = letter;
+    }
+    return thumb;
+  }
+
   function render() {
     var now = new Date();
     var list = visibleTrucks(now);
@@ -564,15 +577,7 @@
       var btn = document.createElement("button");
       btn.type = "button";
       btn.className = "truck";
-      var thumb = document.createElement(tr.photo ? "img" : "div");
-      thumb.className = "thumb" + (tr.photo ? "" : " ph");
-      if (tr.photo) {
-        thumb.src = tr.photo;
-        thumb.alt = "";
-      } else {
-        thumb.textContent = letter;
-        thumb.style.background = status === "now" ? "#7dcea0" : (status === "later" ? "#f2b705" : "#f4efe6");
-      }
+      var thumb = truckFace(tr);
       var body = document.createElement("div");
       var h = document.createElement("h3");
       h.textContent = tr.name;
@@ -625,6 +630,7 @@
       var btn = document.createElement("button");
       btn.type = "button";
       btn.className = "truck";
+      btn.appendChild(truckFace(tr));
       var body = document.createElement("div");
       var h = document.createElement("h3");
       h.textContent = tr.name;
@@ -655,7 +661,9 @@
     var codeList = $("codeList");
     var codeEmpty = $("codeListEmpty");
     codeList.textContent = "";
-    codeEmpty.hidden = codes.length > 0;
+    var codeSection = $("codeSection");
+    if (codeSection) codeSection.hidden = codes.length === 0;
+    codeEmpty.hidden = true;
     codes.forEach(function (tr) {
       var li = document.createElement("li");
       var body = document.createElement("div");
@@ -1000,6 +1008,7 @@
       var btn = document.createElement("button");
       btn.type = "button";
       btn.className = "truck";
+      btn.appendChild(truckFace(tr));
       var body = document.createElement("div");
       var h = document.createElement("h3");
       h.textContent = tr.name;
