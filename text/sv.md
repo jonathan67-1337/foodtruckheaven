@@ -110,6 +110,58 @@ Rubrik, maten: Maten
 
 Hjälp: Maten du serverar.
 
+### Streetfood
+
+För foodtruck:
+
+Rubrik: Streetfood
+
+Brödtext: Kryssa i vilka av de här tio trucken serverar.
+
+Alternativ: Tacos, Pani puri, Hot dog, Waffles, Croissant, Tamales, Empanadas, Phở, Ceviche, Crêpes
+
+För besökare:
+
+Rubrik: Streetfood
+
+Mening: Visa bara foodtrucks där ägaren har kryssat i den här sorten.
+
+Tomt: Inga foodtrucks med den sorten är inlagda i det här landet.
+
+### Vägbeskrivning
+
+Knapp: Vägbeskrivning
+
+Mening: Öppnar vägbeskrivning till den här nålen.
+
+### Slut för idag
+
+För foodtruck:
+
+Kryssruta: Slut för idag
+
+Mening: Maten är slut för idag. Trucken finns kvar.
+
+För besökare:
+
+Mening: Slut för idag.
+
+Av: Skriv inget när rutan inte är ikryssad.
+
+### Sök
+
+Fält: Sök
+
+Mening: Sök på namn eller plats.
+
+Tomt: Ingen foodtruck med det namnet eller den platsen är inlagd.
+
+### Min position
+
+Knapp: Visa var jag är
+
+Mening: Centrerar kartan på din position.
+
 ### Ändra truck
 
 Knapp: Ändra truck
