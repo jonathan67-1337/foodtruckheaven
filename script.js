@@ -27,6 +27,13 @@
       codeBlank: "Lämna tomt om du inte har någon kod.",
       codeForFav: "Den här koden har ägaren lagt in för dig som har trucken som favorit.",
       codeNone: "Ingen rabattkod är inlagd.",
+      codeAskTitle: "Be om rabattkod",
+      codeAskBody: "Fyll i när du tänker besöka trucken. Knappen går att använda bara när besöket är inom 60 minuter. Inte tidigare, och inte efter tiden. Förfrågan skapar ingen kod. Ser du en kod är det en kod ägaren själv har skrivit in, och den syns bara om du har trucken som favorit.",
+      codeAskTime: "Tid för besöket",
+      codeAskSend: "Be om rabattkod",
+      codeAskEarly: "Det är för tidigt. Du kan be om en rabattkod tidigast 60 minuter före besöket.",
+      codeAskLate: "Tiden har passerat. Du kan be om en rabattkod bara inom 60 minuter före besöket.",
+      codeAskSent: "Förfrågan är skickad. Den skapar ingen kod. Ser du en kod är det en kod ägaren själv har skrivit in, och den syns bara om du har trucken som favorit.",
       favTitle: "Favorit",
       favBody: "Märk en truck som favorit så hittar du tillbaka till den. Favoriten lägger inte till något i kartpopupen. Där står fortfarande bara namn, bilder, plats och öppettider.",
       favMark: "Märk som favorit",
@@ -114,6 +121,13 @@
       codeBlank: "La stå tomt om du ikke har en kode.",
       codeForFav: "Denne koden har eieren lagt inn for deg som har trucken som favoritt.",
       codeNone: "Ingen rabattkode er lagt inn.",
+      codeAskTitle: "Be om rabattkode",
+      codeAskBody: "Fyll inn når du tenker å besøke trucken. Knappen kan bare brukes når besøket er innen 60 minutter. Ikke tidligere, og ikke etter tiden. Forespørselen lager ingen kode. Ser du en kode, er det en kode eieren selv har skrevet inn, og den vises bare om du har trucken som favoritt.",
+      codeAskTime: "Tid for besøket",
+      codeAskSend: "Be om rabattkode",
+      codeAskEarly: "Det er for tidlig. Du kan be om en rabattkode tidligst 60 minutter før besøket.",
+      codeAskLate: "Tiden har passert. Du kan be om en rabattkode bare innen 60 minutter før besøket.",
+      codeAskSent: "Forespørselen er sendt. Den lager ingen kode. Ser du en kode, er det en kode eieren selv har skrevet inn, og den vises bare om du har trucken som favoritt.",
       favTitle: "Favoritt",
       favBody: "Merk en truck som favoritt så finner du tilbake til den. Favoritten legger ikke til noe i kartpopupen. Der står fortsatt bare navn, bilder, sted og åpningstider.",
       favMark: "Merk som favoritt",
@@ -330,6 +344,10 @@
     $("lblCode").textContent = t("codeLabel");
     $("codeHelp").textContent = t("codeHelp");
     $("codeBlank").textContent = t("codeBlank");
+    $("codeAskTitle").textContent = t("codeAskTitle");
+    $("codeAskBody").textContent = t("codeAskBody");
+    $("lblCodeAskTime").textContent = t("codeAskTime");
+    $("codeAskSend").textContent = t("codeAskSend");
     $("lblCity").textContent = t("city");
     $("favTitle").textContent = t("favTitle");
     $("favBody").textContent = t("favBody");
@@ -838,6 +856,21 @@
       });
     }
   }
+
+  function onCodeAsk(ev) {
+    ev.preventDefault();
+    var status = $("codeAskStatus");
+    var raw = $("codeAskTime").value;
+    if (!raw) { status.textContent = t("codeAskEarly"); return; }
+    var visit = new Date(raw);
+    if (isNaN(visit.getTime())) { status.textContent = t("codeAskEarly"); return; }
+    var diff = visit.getTime() - Date.now();
+    var hour = 60 * 60 * 1000;
+    if (diff <= 0) { status.textContent = t("codeAskLate"); return; }
+    if (diff > hour) { status.textContent = t("codeAskEarly"); return; }
+    status.textContent = t("codeAskSent");
+  }
+
   function onAsk(ev) {
     ev.preventDefault();
     var status = $("askStatus");
@@ -935,6 +968,7 @@
       });
     });
     $("askForm").addEventListener("submit", onAsk);
+    $("codeAskForm").addEventListener("submit", onCodeAsk);
     $("revForm").addEventListener("submit", onReview);
     $("detailClose").addEventListener("click", function () { $("detail").close(); });
     $("detail").addEventListener("click", function (ev) {
