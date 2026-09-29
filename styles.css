@@ -217,3 +217,35 @@ footer p { margin: 0.2rem 0; }
   *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
   .choice, .choice[aria-pressed="true"], .truck, .truck:hover, .pin span, .pin b { transform: none; }
 }
+
+.cities {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding: 0 0 10px;
+}
+.cities button {
+  flex: 0 0 auto;
+  border: 2px solid var(--ink);
+  background: var(--paper-2);
+  border-radius: 999px;
+  padding: 6px 12px;
+  font-weight: 700;
+  cursor: pointer;
+}
+.settings-btn { min-height: 40px; }
+.under-map {
+  width: min(1180px, calc(100% - 2 * var(--space)));
+  margin: 12px auto 0;
+  display: grid;
+  gap: 8px;
+}
+.under-map h2 {
+  margin: 12px 0 0;
+  font-family: var(--display);
+  font-weight: 400;
+  font-size: 1.25rem;
+}
+@media (min-width: 900px) {
+  .under-map { grid-column: 1 / -1; }
+}

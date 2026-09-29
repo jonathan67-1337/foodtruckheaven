@@ -208,13 +208,12 @@
     nb: ["jan", "feb", "mar", "apr", "mai", "jun", "jul", "aug", "sep", "okt", "nov", "des"]
   };
 
-  var BOUNDS = {
-    SE: [[55.2, 10.8], [69.1, 24.3]],
-    NO: [[57.9, 4.4], [71.3, 31.3]]
-  };
+  var boundsByCode = null;
+  var citiesByCountry = null;
 
   var state = {
-    country: "SE",
+    country: "",
+    editingId: null,
     lang: "sv",
     mode: "visitor",
     filter: "all",
@@ -310,8 +309,13 @@
       return [];
     }
   }
+  function isCountry(code) {
+    if (typeof code !== "string" || !/^[A-Z]{2}$/.test(code)) return false;
+    if (boundsByCode && Object.keys(boundsByCode).length) return !!boundsByCode[code];
+    return true;
+  }
   function validOwn(tr) {
-    return tr && typeof tr.name === "string" && (tr.country === "SE" || tr.country === "NO") &&
+    return tr && typeof tr.name === "string" && isCountry(tr.country) &&
       typeof tr.lat === "number" && typeof tr.lng === "number" &&
       tr.hours && tr.hours.from && tr.hours.to &&
       Array.isArray(tr.dates);
@@ -319,11 +323,37 @@
   function saveOwn(list) {
     localStorage.setItem(STORAGE_TRUCKS, JSON.stringify(list));
   }
+  var published = [];
   function allTrucks() {
-    return loadOwn();
+    var own = loadOwn();
+    var ids = {};
+    own.forEach(function (tr) { ids[tr.id] = true; });
+    return published.filter(function (tr) { return validOwn(tr) && !ids[tr.id]; }).concat(own);
   }
   function inCountry(list) {
+    if (!state.country) return list.slice();
     return list.filter(function (tr) { return tr.country === state.country; });
+  }
+  function isOwnId(id) {
+    var found = false;
+    loadOwn().forEach(function (tr) { if (tr.id === id) found = true; });
+    return found;
+  }
+  function addedAt(tr) {
+    if (tr && typeof tr.addedAt === "number") return tr.addedAt;
+    var m = /^own-(\d+)$/.exec(tr && tr.id || "");
+    return m ? +m[1] : 0;
+  }
+  function newestFirst(list) {
+    return list.slice().sort(function (a, b) { return addedAt(b) - addedAt(a); });
+  }
+  function dayLines(tr) {
+    var n = tr && tr.dates && tr.dates.length || 0;
+    if (!n) return null;
+    return {
+      count: n === 1 ? "Står här i 1 dag." : ("Står här i " + n + " dagar."),
+      note: "Antalet är de dagar ägaren själv har lagt in."
+    };
   }
 
   function applyCopy() {
@@ -380,7 +410,8 @@
     $("footerNote").textContent = t("footer");
     $("detailClose").setAttribute("aria-label", t("closeDialog"));
     $("detailDelete").textContent = t("remove");
-    $("countryGroup").setAttribute("aria-label", t("countryLabel"));
+    fillCountrySelect();
+    renderCities();
     $("map").setAttribute("aria-label", t("mapLabel"));
     updatePinStatus();
   }
@@ -391,21 +422,69 @@
     el.textContent = state.pin ? t("pinSet") : t("pinMissing");
   }
 
+  function fitMap(code) {
+    if (!map) return;
+    var entry = boundsByCode && code && boundsByCode[code];
+    var box = entry && entry[1];
+    if (box && box.length === 4) map.fitBounds([[box[1], box[0]], [box[3], box[2]]], { padding: [24, 24] });
+    else map.setView([20, 0], 2);
+  }
+  function fillCountrySelect() {
+    var pick = $("countryPick");
+    if (!pick || !boundsByCode) return;
+    var names = null;
+    try { names = new Intl.DisplayNames(["sv"], { type: "region" }); } catch (e) {}
+    var rows = Object.keys(boundsByCode).map(function (code) {
+      var label = code;
+      try { if (names) label = names.of(code) || code; } catch (e2) {}
+      return { code: code, label: label };
+    });
+    rows.sort(function (a, b) { return a.label.localeCompare(b.label, "sv"); });
+    var current = pick.value;
+    pick.textContent = "";
+    var blank = document.createElement("option");
+    blank.value = "";
+    blank.textContent = "";
+    pick.appendChild(blank);
+    rows.forEach(function (row) {
+      var opt = document.createElement("option");
+      opt.value = row.code;
+      opt.textContent = row.label;
+      pick.appendChild(opt);
+    });
+    pick.value = state.country && isCountry(state.country) ? state.country : "";
+  }
+  function renderCities() {
+    var row = $("cityRow");
+    if (!row) return;
+    row.textContent = "";
+    var list = citiesByCountry && state.country && citiesByCountry[state.country];
+    if (!list) return;
+    list.forEach(function (city) {
+      var btn = document.createElement("button");
+      btn.type = "button";
+      btn.textContent = city.n;
+      btn.addEventListener("click", function () {
+        if (map) map.setView([city.lat, city.lng], 12);
+      });
+      row.appendChild(btn);
+    });
+  }
   function setCountry(code, persist) {
-    if (code !== "SE" && code !== "NO") code = "SE";
-    if (state.country !== code) {
-      state.pin = null;
-    }
-    state.country = code;
-    state.lang = code === "NO" ? "nb" : "sv";
+    var next = isCountry(code) ? code : "";
+    if (state.country !== next) state.pin = null;
+    state.country = next;
+    state.lang = next === "NO" ? "nb" : "sv";
+    if (next) state.outside = false;
     if (persist) {
-      try { localStorage.setItem(STORAGE_COUNTRY, code); } catch (e) {}
+      try {
+        if (next) localStorage.setItem(STORAGE_COUNTRY, next);
+        else localStorage.removeItem(STORAGE_COUNTRY);
+      } catch (e) {}
     }
-    $("countrySE").setAttribute("aria-pressed", code === "SE" ? "true" : "false");
-    $("countryNO").setAttribute("aria-pressed", code === "NO" ? "true" : "false");
     applyCopy();
     if (map) {
-      map.fitBounds(BOUNDS[code], { padding: [24, 24] });
+      fitMap(next);
       render();
     }
   }
@@ -517,9 +596,77 @@
         toggleFav(tr.id);
         render();
       });
+      var days = dayLines(tr);
+      if (days) {
+        var day = document.createElement("p");
+        day.className = "meta";
+        day.textContent = days.count;
+        var note = document.createElement("p");
+        note.className = "meta";
+        note.textContent = days.note;
+        body.appendChild(day);
+        body.appendChild(note);
+      }
       li.appendChild(btn);
       li.appendChild(fav);
       ul.appendChild(li);
+    });
+    renderUnderMap();
+  }
+  function renderUnderMap() {
+    var trucks = newestFirst(inCountry(allTrucks()));
+    var recent = $("recentList");
+    var recentEmpty = $("recentEmpty");
+    recent.textContent = "";
+    recentEmpty.hidden = trucks.length > 0;
+    trucks.forEach(function (tr) {
+      var li = document.createElement("li");
+      var btn = document.createElement("button");
+      btn.type = "button";
+      btn.className = "truck";
+      var body = document.createElement("div");
+      var h = document.createElement("h3");
+      h.textContent = tr.name;
+      var meta = document.createElement("p");
+      meta.className = "meta";
+      meta.textContent = tr.city + " · " + t("hours").replace("{from}", tr.hours.from).replace("{to}", tr.hours.to);
+      body.appendChild(h);
+      body.appendChild(meta);
+      var days = dayLines(tr);
+      if (days) {
+        var day = document.createElement("p");
+        day.className = "meta";
+        day.textContent = days.count;
+        var note = document.createElement("p");
+        note.className = "meta";
+        note.textContent = days.note;
+        body.appendChild(day);
+        body.appendChild(note);
+      }
+      btn.appendChild(body);
+      btn.addEventListener("click", function () { openDetail(tr); });
+      li.appendChild(btn);
+      recent.appendChild(li);
+    });
+    var codes = newestFirst(trucks.filter(function (tr) {
+      return isFav(tr.id) && tr.code && String(tr.code).trim();
+    }));
+    var codeList = $("codeList");
+    var codeEmpty = $("codeListEmpty");
+    codeList.textContent = "";
+    codeEmpty.hidden = codes.length > 0;
+    codes.forEach(function (tr) {
+      var li = document.createElement("li");
+      var body = document.createElement("div");
+      body.className = "truck";
+      var h = document.createElement("h3");
+      h.textContent = tr.name;
+      var code = document.createElement("p");
+      code.textContent = String(tr.code).trim();
+      body.appendChild(h);
+      body.appendChild(code);
+      li.appendChild(body);
+      codeList.appendChild(li);
     });
   }
 
@@ -534,6 +681,15 @@
     div.appendChild(strong);
     div.appendChild(p);
     div.appendChild(h);
+    var days = dayLines(tr);
+    if (days) {
+      var d1 = document.createElement("div");
+      d1.textContent = days.count;
+      var d2 = document.createElement("div");
+      d2.textContent = days.note;
+      div.appendChild(d1);
+      div.appendChild(d2);
+    }
     return div;
   }
 
@@ -558,6 +714,15 @@
     $("detailCity").textContent = tr.city;
     $("detailHours").textContent = t("hours").replace("{from}", tr.hours.from).replace("{to}", tr.hours.to);
     $("detailWhen").textContent = scheduleText(tr);
+    var days = dayLines(tr);
+    $("detailDays").textContent = days ? days.count : "";
+    $("detailDaysNote").textContent = days ? days.note : "";
+    var edit = $("detailEdit");
+    var editHelp = $("detailEditHelp");
+    var ownTruck = isOwnId(tr.id);
+    edit.hidden = !ownTruck;
+    editHelp.hidden = !ownTruck;
+    edit.onclick = function () { openEditor(tr); };
     var del = $("detailDelete");
     del.hidden = false;
     del.onclick = function () {
@@ -669,10 +834,17 @@
       dates = [one];
     }
 
+    var updated = !!state.editingId;
+    var existing = null;
+    if (state.editingId) {
+      loadOwn().forEach(function (item) { if (item.id === state.editingId) existing = item; });
+    }
+    if (!existing && !isCountry(state.country)) return;
     var truck = {
-      id: "own-" + Date.now(),
+      id: existing ? existing.id : ("own-" + Date.now()),
+      addedAt: existing && typeof existing.addedAt === "number" ? existing.addedAt : Date.now(),
       name: name,
-      country: state.country,
+      country: existing ? existing.country : state.country,
       city: city,
       lat: state.pin.lat,
       lng: state.pin.lng,
@@ -685,13 +857,24 @@
     };
 
     var own = loadOwn();
-    own.push(truck);
+    if (existing) {
+      var replaced = false;
+      own = own.map(function (item) {
+        if (item.id !== existing.id) return item;
+        replaced = true;
+        return truck;
+      });
+      if (!replaced) own.push(truck);
+    } else {
+      own.push(truck);
+    }
     var photoDropped = false;
     try {
       saveOwn(own);
     } catch (e) {
       truck.photo = null;
-      own[own.length - 1] = truck;
+      truck.foodPhoto = null;
+      own = own.map(function (item) { return item.id === truck.id ? truck : item; });
       try { saveOwn(own); photoDropped = true; }
       catch (e2) {
         err.textContent = t("photoFail");
@@ -710,7 +893,8 @@
     $("photoPreview").hidden = true;
     onSpanChange();
     updatePinStatus();
-    err.textContent = photoDropped ? t("photoFail") : t("saved");
+    err.textContent = updated ? "Ändringen är sparad. Det är samma truck som förut." : (photoDropped ? t("photoFail") : t("saved"));
+    state.editingId = null;
     setFilter("all");
     setMode("visitor");
     map.setView([truck.lat, truck.lng], 13);
@@ -718,34 +902,62 @@
     openDetail(truck);
   }
 
-  function detectCountry() {
-    var saved = null;
-    try { saved = localStorage.getItem(STORAGE_COUNTRY); } catch (e) {}
-    if (saved === "SE" || saved === "NO") return Promise.resolve({ code: saved, outside: false });
-
-    var ctrl = new AbortController();
-    var timer = setTimeout(function () { ctrl.abort(); }, 2500);
-    return fetch("https://ipwho.is/", { signal: ctrl.signal })
-      .then(function (res) { return res.json(); })
-      .then(function (data) {
-        clearTimeout(timer);
-        var code = data && data.country_code;
-        if (code === "SE" || code === "NO") return { code: code, outside: false };
-        return { code: fallbackCountry(), outside: true };
-      })
-      .catch(function () {
-        clearTimeout(timer);
-        return { code: fallbackCountry(), outside: false };
-      });
+  function reverseCountry(lat, lng) {
+    var url = "https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=" +
+      encodeURIComponent(lat) + "&longitude=" + encodeURIComponent(lng) + "&localityLanguage=en";
+    return fetch(url).then(function (res) { return res.json(); }).then(function (data) {
+      var code = data && data.countryCode;
+      return (typeof code === "string" && /^[A-Z]{2}$/.test(code)) ? code : null;
+    }).catch(function () { return null; });
   }
-
-  function fallbackCountry() {
-    var lang = (navigator.language || "").toLowerCase();
-    if (lang.indexOf("nb") === 0 || lang.indexOf("nn") === 0 || lang.indexOf("no") === 0) return "NO";
-    try {
-      if (Intl.DateTimeFormat().resolvedOptions().timeZone === "Europe/Oslo") return "NO";
-    } catch (e) {}
-    return "SE";
+  function detectCountry() {
+    return new Promise(function (resolve) {
+      if (!navigator.geolocation) { resolve(null); return; }
+      var settled = false;
+      function done(code) { if (settled) return; settled = true; resolve(code || null); }
+      var timer = setTimeout(function () { done(null); }, 8000);
+      navigator.geolocation.getCurrentPosition(function (pos) {
+        clearTimeout(timer);
+        reverseCountry(pos.coords.latitude, pos.coords.longitude).then(done);
+      }, function () { clearTimeout(timer); done(null); }, { timeout: 7000, maximumAge: 300000 });
+    });
+  }
+  function loadGeoData() {
+    return Promise.all([
+      fetch("data/country-bounds.json").then(function (res) { return res.json(); }).then(function (data) { boundsByCode = data; }).catch(function () { boundsByCode = {}; }),
+      fetch("data/cities.json").then(function (res) { return res.json(); }).then(function (data) { citiesByCountry = data; }).catch(function () { citiesByCountry = {}; }),
+      fetch("data/trucks.json").then(function (res) { return res.json(); }).then(function (data) { published = Array.isArray(data) ? data.filter(validOwn) : []; }).catch(function () { published = []; })
+    ]);
+  }
+  function openEditor(tr) {
+    if (!isOwnId(tr.id)) return;
+    state.editingId = tr.id;
+    $("truckName").value = tr.name;
+    $("truckCity").value = tr.city || "";
+    $("truckCode").value = tr.code || "";
+    $("openFrom").value = tr.hours.from;
+    $("openTo").value = tr.hours.to;
+    state.pin = { lat: tr.lat, lng: tr.lng };
+    state.truckPhoto = imageOrNull(tr.photo);
+    state.foodPhoto = imageOrNull(tr.foodPhoto);
+    showShot($("photoPreview"), state.truckPhoto, "");
+    showShot($("foodPreview"), state.foodPhoto, "");
+    var dates = (tr.dates || []).slice().sort();
+    var many = document.querySelector('input[name="span"][value="many"]');
+    var one = document.querySelector('input[name="span"][value="one"]');
+    if (dates.length > 1) {
+      many.checked = true;
+      $("startDate").value = dates[0];
+      $("endDate").value = dates[dates.length - 1];
+    } else {
+      one.checked = true;
+      $("oneDate").value = dates[0] || isoDate(new Date());
+    }
+    onSpanChange();
+    updatePinStatus();
+    $("formError").textContent = "";
+    if ($("detail").open) $("detail").close();
+    setMode("owner");
   }
 
 
@@ -922,7 +1134,7 @@
       updatePinStatus();
       setTimeout(function () { map.invalidateSize(); }, 40);
     });
-    map.fitBounds(BOUNDS[state.country], { padding: [24, 24] });
+    map.setView([20, 0], 2);
   }
 
   function init() {
@@ -933,10 +1145,32 @@
     end.setDate(end.getDate() + 6);
     $("endDate").value = isoDate(end);
 
-    $("btnOwner").addEventListener("click", function () { setMode("owner"); });
+    $("btnOwner").addEventListener("click", function () {
+      if (state.editingId) {
+        state.editingId = null;
+        $("ownerForm").reset();
+        state.pin = null;
+        state.truckPhoto = null;
+        state.foodPhoto = null;
+        $("photoPreview").hidden = true;
+        $("foodPreview").hidden = true;
+        $("openFrom").value = "11:00";
+        $("openTo").value = "20:00";
+        $("oneDate").value = isoDate(new Date());
+        onSpanChange();
+        updatePinStatus();
+        $("formError").textContent = "";
+      }
+      setMode("owner");
+    });
     $("btnVisitor").addEventListener("click", function () { setMode("visitor"); });
-    $("countrySE").addEventListener("click", function () { state.outside = false; setCountry("SE", true); });
-    $("countryNO").addEventListener("click", function () { state.outside = false; setCountry("NO", true); });
+    $("openSettings").addEventListener("click", function () { $("settings").showModal(); });
+    $("settingsClose").addEventListener("click", function () { $("settings").close(); });
+    $("settings").addEventListener("click", function (ev) { if (ev.target === $("settings")) $("settings").close(); });
+    $("countryPick").addEventListener("change", function () {
+      state.outside = false;
+      setCountry($("countryPick").value, true);
+    });
     $("filterAll").addEventListener("click", function () { setFilter("all"); });
     $("filterToday").addEventListener("click", function () { setFilter("today"); });
     $("pickPlace").addEventListener("click", startPlacing);
@@ -982,17 +1216,27 @@
     });
 
     initMap();
-    setCountry("SE", false);
+    applyCopy();
     setMode("visitor");
     setFilter("all");
     onSpanChange();
-
-    detectCountry().then(function (found) {
+    loadGeoData().then(function () {
       var saved = null;
       try { saved = localStorage.getItem(STORAGE_COUNTRY); } catch (e) {}
-      if (saved === "SE" || saved === "NO") return;
-      state.outside = !!found.outside;
-      setCountry(found.code, false);
+      if (isCountry(saved)) { setCountry(saved, false); return; }
+      return detectCountry().then(function (code) {
+        if (!isCountry(code)) {
+          state.outside = true;
+          state.country = "";
+          state.lang = "sv";
+          applyCopy();
+          fitMap("");
+          render();
+          return;
+        }
+        state.outside = false;
+        setCountry(code, false);
+      });
     });
   }
 
