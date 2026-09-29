@@ -25,7 +25,7 @@ Land gissas via ipwho.is, sedan språk eller tidszon. Misslyckas det visas Sveri
 
 Kartan är tom tills någon lägger in en truck. En inlagd truck sparas i webbläsarens localStorage och syns bara där, inte för andra besökare. Texten i `text/sv.md` beskriver hur det ska fungera när en truck är inlagd: namn, bilder, plats och öppettider, inget annat.
 
-Ägaren anger namn, valfri bild, plats i ord, en punkt på kartan, och antingen en dag eller upp till 45 dagar framåt, plus öppettider.
+Ägaren anger namn, bild på trucken, bild på maten, plats, öppettider och valfri rabattkod. Besökaren kan märka en favorit, be trucken komma (plats och tid) och lämna en recension som tre bilder. Inloggning och mejl finns inte. Texten styrs av text/sv.md.
 
 Kartan är Leaflet med OpenStreetMap.
 

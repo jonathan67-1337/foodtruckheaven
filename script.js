@@ -3,18 +3,52 @@
 
   var STORAGE_TRUCKS = "foodtruckheaven.trucks.v1";
   var STORAGE_COUNTRY = "foodtruckheaven.country";
+  var STORAGE_FAV = "foodtruckheaven.favs.v1";
+  var STORAGE_ASK = "foodtruckheaven.asks.v1";
+  var STORAGE_REV = "foodtruckheaven.revs.v1";
   var MAX_DAYS = 45;
 
   var COPY = {
     sv: {
       skip: "Hoppa till kartan",
       visitor: "Besökare",
-      tagline: "Kartan visar foodtrucks i det land du är i. Är du i Sverige ser du trucks i Sverige. Är du i Norge ser du trucks i Norge.",
-      ownerTitle: "Så syns du för besökare",
-      ownerHelp: "Besökare i samma land som din truck ser dig på kartan. Besökare i ett annat land ser dig inte. Besökaren ser bara det du lägger in: namn, bilder, plats och öppettider. En dag, eller många dagar framåt om du står på samma plats. På den här sidan sparas uppgifterna i den här webbläsaren.",
+      tagline: "En foodtruck marknadsför sig genom att lägga in sig själv. Du hittar den på kartan, i det land du är i. Är du i Sverige ser du trucks i Sverige. Är du i Norge ser du trucks i Norge.",
+      ownerTitle: "Marknadsför din foodtruck",
+      ownerHelp: "Du marknadsför din truck genom att lägga in namn, bilder på trucken, bilder på maten, plats och öppettider. Besökare i samma land hittar dig på kartan. Besökare i ett annat land ser dig inte. Besökaren ser bara det du lägger in: namn, bilder, plats och öppettider. En dag, eller många dagar framåt om du står på samma plats. På den här sidan sparas uppgifterna i den här webbläsaren.",
       name: "Namn",
-      photo: "Bilder",
-      city: "Plats, med ord",
+      photoHeading: "Bilder",
+      photoIntro: "Lägg upp bilder på hur trucken ser ut, och bilder på maten. Besökaren ser bara de bilder du har lagt in.",
+      photo: "Trucken",
+      photoTruckHelp: "Hur trucken ser ut.",
+      food: "Maten",
+      foodHelp: "Maten du serverar.",
+      codeLabel: "Rabattkod",
+      codeHelp: "Skriv en kod om du vill ge den till dem som har din truck som favorit. Koden syns inte på kartan.",
+      codeBlank: "Lämna tomt om du inte har någon kod.",
+      codeForFav: "Den här koden har ägaren lagt in för dig som har trucken som favorit.",
+      codeNone: "Ingen rabattkod är inlagd.",
+      favTitle: "Favorit",
+      favBody: "Märk en truck som favorit så hittar du tillbaka till den. Favoriten lägger inte till något i kartpopupen. Där står fortfarande bara namn, bilder, plats och öppettider.",
+      favMark: "Märk som favorit",
+      favDone: "Favorit",
+      favEmpty: "Du har inga favoriter ännu.",
+      askTitle: "Be trucken komma",
+      askBody: "Be en truck komma till en plats vid en tid. Trucken ser plats och tid. Inget annat.",
+      askPlace: "Plats",
+      askTime: "Tid",
+      askSend: "Skicka förfrågan",
+      askNeed: "Fyll i plats och tid.",
+      askSent: "Förfrågan skickad. Trucken ser plats och tid.",
+      revTitle: "Recension",
+      revBody: "En recension är tre bilder som besökaren själv lägger in. En på maten, en på foodtrucken och en på menyn. Ingen text, och inga andra recensioner.",
+      revFood: "Maten",
+      revTruck: "Foodtrucken",
+      revMenu: "Menyn",
+      revSend: "Skicka recension",
+      revNeed: "Lägg in en bild på maten, en på foodtrucken och en på menyn.",
+      revSaved: "Recensionen är sparad.",
+      revEmpty: "Ingen recension är inlagd.",
+      city: "Plats",
       pinMissing: "Platsen på kartan saknas.",
       pinSet: "Plats satt på kartan.",
       pick: "Välj plats på kartan",
@@ -30,7 +64,7 @@
       cancel: "Avbryt",
       place: "Klicka på kartan där trucken står.",
       placeCancel: "Avbryt",
-      listAll: "Foodtrucks i ditt land",
+      listAll: "Hitta foodtrucken på kartan",
       listToday: "Ute idag",
       filterAll: "Alla",
       filterToday: "Idag",
@@ -65,12 +99,43 @@
     nb: {
       skip: "Hopp til kartet",
       visitor: "Besøkere",
-      tagline: "Kartet viser foodtrucks i det landet du er i. Er du i Sverige ser du trucks i Sverige. Er du i Norge ser du trucks i Norge.",
-      ownerTitle: "Slik synes du for besøkende",
-      ownerHelp: "Besøkende i samme land som trucken din ser deg på kartet. Besøkende i et annet land ser deg ikke. Besøkende ser bare det du legger inn: navn, bilder, sted og åpningstider. Én dag, eller mange dager fremover om du står på samme plass. På denne siden lagres opplysningene i denne nettleseren.",
+      tagline: "En foodtruck markedsfører seg ved å legge seg inn selv. Du finner den på kartet, i det landet du er i. Er du i Sverige ser du trucks i Sverige. Er du i Norge ser du trucks i Norge.",
+      ownerTitle: "Markedsfør foodtrucken din",
+      ownerHelp: "Du markedsfører trucken ved å legge inn navn, bilder av trucken, bilder av maten, sted og åpningstider. Besøkende i samme land finner deg på kartet. Besøkende i et annet land ser deg ikke. Besøkende ser bare det du legger inn: navn, bilder, sted og åpningstider. Én dag, eller mange dager fremover om du står på samme plass. På denne siden lagres opplysningene i denne nettleseren.",
       name: "Navn",
-      photo: "Bilder",
-      city: "Sted, med ord",
+      photoHeading: "Bilder",
+      photoIntro: "Legg ut bilder av hvordan trucken ser ut, og bilder av maten. Besøkende ser bare bildene du har lagt inn.",
+      photo: "Trucken",
+      photoTruckHelp: "Hvordan trucken ser ut.",
+      food: "Maten",
+      foodHelp: "Maten du serverer.",
+      codeLabel: "Rabattkode",
+      codeHelp: "Skriv en kode om du vil gi den til dem som har trucken din som favoritt. Koden vises ikke på kartet.",
+      codeBlank: "La stå tomt om du ikke har en kode.",
+      codeForFav: "Denne koden har eieren lagt inn for deg som har trucken som favoritt.",
+      codeNone: "Ingen rabattkode er lagt inn.",
+      favTitle: "Favoritt",
+      favBody: "Merk en truck som favoritt så finner du tilbake til den. Favoritten legger ikke til noe i kartpopupen. Der står fortsatt bare navn, bilder, sted og åpningstider.",
+      favMark: "Merk som favoritt",
+      favDone: "Favoritt",
+      favEmpty: "Du har ingen favoritter ennå.",
+      askTitle: "Be trucken komme",
+      askBody: "Be en truck komme til et sted på et tidspunkt. Trucken ser sted og tid. Ikke noe annet.",
+      askPlace: "Sted",
+      askTime: "Tid",
+      askSend: "Send forespørsel",
+      askNeed: "Fyll inn sted og tid.",
+      askSent: "Forespørselen er sendt. Trucken ser sted og tid.",
+      revTitle: "Anmeldelse",
+      revBody: "En anmeldelse er tre bilder som besøkende selv legger inn. Ett av maten, ett av foodtrucken og ett av menyen. Ingen tekst, og ingen andre anmeldelser.",
+      revFood: "Maten",
+      revTruck: "Foodtrucken",
+      revMenu: "Menyen",
+      revSend: "Send anmeldelse",
+      revNeed: "Legg inn et bilde av maten, ett av foodtrucken og ett av menyen.",
+      revSaved: "Anmeldelsen er lagret.",
+      revEmpty: "Ingen anmeldelse er lagt inn.",
+      city: "Sted",
       pinMissing: "Stedet på kartet mangler.",
       pinSet: "Sted satt på kartet.",
       pick: "Velg sted på kartet",
@@ -86,7 +151,7 @@
       cancel: "Avbryt",
       place: "Klikk på kartet der trucken står.",
       placeCancel: "Avbryt",
-      listAll: "Foodtrucks i ditt land",
+      listAll: "Finn foodtrucken på kartet",
       listToday: "Ute i dag",
       filterAll: "Alle",
       filterToday: "I dag",
@@ -141,7 +206,8 @@
     filter: "all",
     placing: false,
     pin: null,
-    photo: null,
+    truckPhoto: null,
+    foodPhoto: null,
     outside: false
   };
 
@@ -255,8 +321,29 @@
     $("ownerTitle").textContent = t("ownerTitle");
     $("ownerHelp").textContent = t("ownerHelp");
     $("lblName").textContent = t("name");
+    $("photoHeading").textContent = t("photoHeading");
+    $("photoIntro").textContent = t("photoIntro");
     $("lblPhoto").textContent = t("photo");
+    $("photoTruckHelp").textContent = t("photoTruckHelp");
+    $("lblFood").textContent = t("food");
+    $("foodHelp").textContent = t("foodHelp");
+    $("lblCode").textContent = t("codeLabel");
+    $("codeHelp").textContent = t("codeHelp");
+    $("codeBlank").textContent = t("codeBlank");
     $("lblCity").textContent = t("city");
+    $("favTitle").textContent = t("favTitle");
+    $("favBody").textContent = t("favBody");
+    $("askTitle").textContent = t("askTitle");
+    $("askBody").textContent = t("askBody");
+    $("lblAskPlace").textContent = t("askPlace");
+    $("lblAskTime").textContent = t("askTime");
+    $("askSend").textContent = t("askSend");
+    $("revTitle").textContent = t("revTitle");
+    $("revBody").textContent = t("revBody");
+    $("lblRevFood").textContent = t("revFood");
+    $("lblRevTruck").textContent = t("revTruck");
+    $("lblRevMenu").textContent = t("revMenu");
+    $("revSend").textContent = t("revSend");
     $("pickPlace").textContent = t("pick");
     $("lblWhen").textContent = t("when");
     $("lblOneDay").textContent = t("oneDay");
@@ -365,12 +452,13 @@
     var ul = $("truckList");
     ul.textContent = "";
     markers.clearLayers();
+    renderExtras();
 
     list.forEach(function (tr) {
       var status = statusOf(tr, now);
       var letter = safeLetter(tr.name);
       var marker = L.marker([tr.lat, tr.lng], { icon: markerIcon(status, letter), title: tr.name });
-      marker.bindPopup(popupHtml(tr, status));
+      marker.bindPopup(popupHtml(tr));
       marker.on("click", function () { selectedId = tr.id; });
       marker.addTo(markers);
 
@@ -393,12 +481,8 @@
       var meta = document.createElement("p");
       meta.className = "meta";
       meta.textContent = tr.city + " · " + t("hours").replace("{from}", tr.hours.from).replace("{to}", tr.hours.to);
-      var pill = document.createElement("span");
-      pill.className = "pill " + status;
-      pill.textContent = status === "now" ? t("openNow") : (status === "later" ? t("later") : t("off"));
       body.appendChild(h);
       body.appendChild(meta);
-      body.appendChild(pill);
       btn.appendChild(thumb);
       btn.appendChild(body);
       btn.addEventListener("click", function () {
@@ -407,50 +491,67 @@
         marker.openPopup();
         openDetail(tr);
       });
+      var fav = document.createElement("button");
+      fav.type = "button";
+      fav.className = "btn ghost mini";
+      fav.textContent = isFav(tr.id) ? t("favDone") : t("favMark");
+      fav.addEventListener("click", function () {
+        toggleFav(tr.id);
+        render();
+      });
       li.appendChild(btn);
+      li.appendChild(fav);
       ul.appendChild(li);
     });
   }
 
-  function popupHtml(tr, status) {
-    var label = status === "now" ? t("openNow") : (status === "later" ? t("later") : t("off"));
+  function popupHtml(tr) {
     var div = document.createElement("div");
     var strong = document.createElement("strong");
     strong.textContent = tr.name;
     var p = document.createElement("div");
-    p.textContent = tr.city + " · " + label;
+    p.textContent = tr.city;
+    var h = document.createElement("div");
+    h.textContent = t("hours").replace("{from}", tr.hours.from).replace("{to}", tr.hours.to);
     div.appendChild(strong);
     div.appendChild(p);
+    div.appendChild(h);
     return div;
   }
 
-  function openDetail(tr) {
-    var now = new Date();
-    var status = statusOf(tr, now);
-    var dlg = $("detail");
-    var photo = $("detailPhoto");
-    if (tr.photo) {
-      photo.hidden = false;
-      photo.src = tr.photo;
-      photo.alt = tr.name;
+  function showShot(el, src, alt) {
+    if (src) {
+      el.hidden = false;
+      el.src = src;
+      el.alt = alt || "";
     } else {
-      photo.hidden = true;
-      photo.removeAttribute("src");
+      el.hidden = true;
+      el.removeAttribute("src");
+      el.alt = "";
     }
-    $("detailBadge").hidden = true;
+  }
+
+  function openDetail(tr) {
+    selectedId = tr.id;
+    var dlg = $("detail");
+    showShot($("detailPhoto"), tr.photo, tr.name);
+    showShot($("detailFood"), tr.foodPhoto, tr.name);
     $("detailName").textContent = tr.name;
     $("detailCity").textContent = tr.city;
     $("detailHours").textContent = t("hours").replace("{from}", tr.hours.from).replace("{to}", tr.hours.to);
     $("detailWhen").textContent = scheduleText(tr);
-    $("detailStatus").textContent = status === "now" ? t("openNow") : (status === "later" ? t("later") : t("off"));
     var del = $("detailDelete");
     del.hidden = false;
     del.onclick = function () {
-      var own = loadOwn().filter(function (item) { return item.id !== tr.id; });
-      saveOwn(own);
+      saveOwn(loadOwn().filter(function (item) { return item.id !== tr.id; }));
+      saveJson(STORAGE_FAV, loadJson(STORAGE_FAV).filter(function (id) { return id !== tr.id; }));
+      saveJson(STORAGE_ASK, loadJson(STORAGE_ASK).filter(function (a) { return a.truckId !== tr.id; }));
+      saveJson(STORAGE_REV, loadJson(STORAGE_REV).filter(function (r) { return r.truckId !== tr.id; }));
+      if (selectedId === tr.id) selectedId = null;
       dlg.close();
       render();
     };
+    renderExtras();
     if (!dlg.open) dlg.showModal();
   }
 
@@ -557,7 +658,9 @@
       city: city,
       lat: state.pin.lat,
       lng: state.pin.lng,
-      photo: state.photo && state.photo.indexOf("data:image/") === 0 ? state.photo : null,
+      photo: imageOrNull(state.truckPhoto),
+      foodPhoto: imageOrNull(state.foodPhoto),
+      code: $("truckCode").value.trim(),
       hours: { from: from, to: to },
       dates: dates,
       demo: false
@@ -579,8 +682,10 @@
     }
 
     state.pin = null;
-    state.photo = null;
+    state.truckPhoto = null;
+    state.foodPhoto = null;
     $("ownerForm").reset();
+    $("foodPreview").hidden = true;
     $("openFrom").value = "11:00";
     $("openTo").value = "20:00";
     $("oneDate").value = isoDate(new Date());
@@ -623,6 +728,150 @@
       if (Intl.DateTimeFormat().resolvedOptions().timeZone === "Europe/Oslo") return "NO";
     } catch (e) {}
     return "SE";
+  }
+
+
+  function imageOrNull(url) {
+    return url && url.indexOf("data:image/") === 0 ? url : null;
+  }
+  function loadJson(key) {
+    try {
+      var raw = JSON.parse(localStorage.getItem(key) || "[]");
+      return Array.isArray(raw) ? raw : [];
+    } catch (e) { return []; }
+  }
+  function saveJson(key, value) {
+    localStorage.setItem(key, JSON.stringify(value));
+  }
+  function isFav(id) {
+    return loadJson(STORAGE_FAV).indexOf(id) !== -1;
+  }
+  function toggleFav(id) {
+    var ids = loadJson(STORAGE_FAV).filter(function (item) { return item !== id; });
+    if (!isFav(id)) ids.push(id);
+    saveJson(STORAGE_FAV, ids);
+  }
+  function truckById(id) {
+    var found = null;
+    allTrucks().forEach(function (tr) { if (tr.id === id) found = tr; });
+    return found;
+  }
+  function renderExtras() {
+    var favs = loadJson(STORAGE_FAV);
+    var favUl = $("favList");
+    favUl.textContent = "";
+    var shown = 0;
+    favs.forEach(function (id) {
+      var tr = truckById(id);
+      if (!tr) return;
+      shown += 1;
+      var li = document.createElement("li");
+      var btn = document.createElement("button");
+      btn.type = "button";
+      btn.className = "truck";
+      var body = document.createElement("div");
+      var h = document.createElement("h3");
+      h.textContent = tr.name;
+      var meta = document.createElement("p");
+      meta.className = "meta";
+      meta.textContent = tr.city + " · " + t("hours").replace("{from}", tr.hours.from).replace("{to}", tr.hours.to);
+      body.appendChild(h);
+      body.appendChild(meta);
+      if (tr.code) {
+        var label = document.createElement("p");
+        label.className = "meta";
+        label.textContent = t("codeLabel");
+        var note = document.createElement("p");
+        note.className = "meta";
+        note.textContent = t("codeForFav");
+        var code = document.createElement("p");
+        code.textContent = tr.code;
+        body.appendChild(label);
+        body.appendChild(note);
+        body.appendChild(code);
+      } else {
+        var none = document.createElement("p");
+        none.className = "meta";
+        none.textContent = t("codeNone");
+        body.appendChild(none);
+      }
+      btn.appendChild(body);
+      btn.addEventListener("click", function () { openDetail(tr); });
+      li.appendChild(btn);
+      favUl.appendChild(li);
+    });
+    $("favEmpty").hidden = shown > 0;
+    $("favEmpty").textContent = t("favEmpty");
+
+    var asks = loadJson(STORAGE_ASK);
+    var ownIds = {};
+    loadOwn().forEach(function (tr) { ownIds[tr.id] = true; });
+    var ownerList = $("ownerAsks");
+    ownerList.textContent = "";
+    asks.forEach(function (a) {
+      if (!ownIds[a.truckId]) return;
+      var li = document.createElement("li");
+      li.textContent = a.place + " · " + a.time;
+      ownerList.appendChild(li);
+    });
+
+    var revEmpty = $("revEmpty");
+    var revList = $("revList");
+    revList.textContent = "";
+    var revs = loadJson(STORAGE_REV).filter(function (r) { return r.truckId === selectedId; });
+    if (!selectedId || !revs.length) {
+      revEmpty.hidden = false;
+      revEmpty.textContent = t("revEmpty");
+    } else {
+      revEmpty.hidden = true;
+      revs.forEach(function (r) {
+        var set = document.createElement("div");
+        set.className = "rev-set";
+        [r.food, r.truck, r.menu].forEach(function (src) {
+          if (!src) return;
+          var img = document.createElement("img");
+          img.src = src;
+          img.alt = "";
+          set.appendChild(img);
+        });
+        revList.appendChild(set);
+      });
+    }
+  }
+  function onAsk(ev) {
+    ev.preventDefault();
+    var status = $("askStatus");
+    var place = $("askPlace").value.trim();
+    var time = $("askTime").value.trim();
+    if (!selectedId || !place || !time) { status.textContent = t("askNeed"); return; }
+    var asks = loadJson(STORAGE_ASK);
+    asks.push({ id: "ask-" + Date.now(), truckId: selectedId, place: place, time: time });
+    try { saveJson(STORAGE_ASK, asks); }
+    catch (e) { return; }
+    $("askForm").reset();
+    status.textContent = t("askSent");
+    renderExtras();
+  }
+  function onReview(ev) {
+    ev.preventDefault();
+    var status = $("revStatus");
+    status.textContent = "";
+    if (!selectedId) { status.textContent = t("revNeed"); return; }
+    var files = ["revFood", "revTruck", "revMenu"].map(function (id) {
+      var input = $(id);
+      return input.files && input.files[0];
+    });
+    if (!files[0] || !files[1] || !files[2]) { status.textContent = t("revNeed"); return; }
+    Promise.all(files.map(shrinkImage)).then(function (urls) {
+      if (!urls[0] || !urls[1] || !urls[2]) { status.textContent = t("revNeed"); return; }
+      var revs = loadJson(STORAGE_REV);
+      revs.push({ id: "rev-" + Date.now(), truckId: selectedId, food: urls[0], truck: urls[1], menu: urls[2] });
+      try { saveJson(STORAGE_REV, revs); }
+      catch (e) { status.textContent = t("photoFail"); return; }
+      $("revForm").reset();
+      status.textContent = t("revSaved");
+      renderExtras();
+    });
   }
 
   function initMap() {
@@ -670,16 +919,23 @@
     $("truckPhoto").addEventListener("change", function () {
       var file = $("truckPhoto").files && $("truckPhoto").files[0];
       shrinkImage(file).then(function (url) {
-        state.photo = url;
+        state.truckPhoto = url;
         var preview = $("photoPreview");
-        if (url) {
-          preview.hidden = false;
-          preview.src = url;
-        } else {
-          preview.hidden = true;
-        }
+        if (url) { preview.hidden = false; preview.src = url; }
+        else preview.hidden = true;
       });
     });
+    $("foodPhoto").addEventListener("change", function () {
+      var file = $("foodPhoto").files && $("foodPhoto").files[0];
+      shrinkImage(file).then(function (url) {
+        state.foodPhoto = url;
+        var preview = $("foodPreview");
+        if (url) { preview.hidden = false; preview.src = url; }
+        else preview.hidden = true;
+      });
+    });
+    $("askForm").addEventListener("submit", onAsk);
+    $("revForm").addEventListener("submit", onReview);
     $("detailClose").addEventListener("click", function () { $("detail").close(); });
     $("detail").addEventListener("click", function (ev) {
       if (ev.target === $("detail")) $("detail").close();

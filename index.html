@@ -43,9 +43,22 @@
       <label for="truckName" id="lblName"></label>
       <input id="truckName" name="name" type="text" maxlength="60" autocomplete="organization" required>
 
+      <h3 id="photoHeading"></h3>
+      <p class="help" id="photoIntro"></p>
       <label for="truckPhoto" id="lblPhoto"></label>
-      <input id="truckPhoto" name="photo" type="file" accept="image/*">
+      <p class="help" id="photoTruckHelp"></p>
+      <input id="truckPhoto" name="truckPhoto" type="file" accept="image/*">
       <img id="photoPreview" alt="" hidden>
+
+      <label for="foodPhoto" id="lblFood"></label>
+      <p class="help" id="foodHelp"></p>
+      <input id="foodPhoto" name="foodPhoto" type="file" accept="image/*">
+      <img id="foodPreview" alt="" hidden>
+
+      <label for="truckCode" id="lblCode"></label>
+      <p class="help" id="codeHelp"></p>
+      <input id="truckCode" name="code" type="text" maxlength="40" autocomplete="off">
+      <p class="help" id="codeBlank"></p>
 
       <label for="truckCity" id="lblCity"></label>
       <input id="truckCity" name="city" type="text" maxlength="40" required>
@@ -91,6 +104,7 @@
         <button class="btn ghost" type="button" id="cancelOwner"></button>
       </div>
     </form>
+    <ul class="plain asks" id="ownerAsks"></ul>
   </section>
 
   <div class="place-banner" id="placeBanner" hidden>
@@ -112,18 +126,54 @@
       </div>
       <p class="summary" id="listSummary"></p>
       <ul class="trucks" id="truckList"></ul>
+
+      <section class="side-block" id="favSection">
+        <h2 id="favTitle"></h2>
+        <p class="help" id="favBody"></p>
+        <p class="summary" id="favEmpty"></p>
+        <ul class="trucks" id="favList"></ul>
+      </section>
+
+      <section class="side-block" id="askSection">
+        <h2 id="askTitle"></h2>
+        <p class="help" id="askBody"></p>
+        <form id="askForm">
+          <label for="askPlace" id="lblAskPlace"></label>
+          <input id="askPlace" type="text" maxlength="80">
+          <label for="askTime" id="lblAskTime"></label>
+          <input id="askTime" type="text" maxlength="40">
+          <p class="form-error" id="askStatus" role="status"></p>
+          <button class="btn solid" type="submit" id="askSend"></button>
+        </form>
+      </section>
+
+      <section class="side-block" id="revSection">
+        <h2 id="revTitle"></h2>
+        <p class="help" id="revBody"></p>
+        <p class="summary" id="revEmpty"></p>
+        <div id="revList"></div>
+        <form id="revForm">
+          <label for="revFood" id="lblRevFood"></label>
+          <input id="revFood" type="file" accept="image/*">
+          <label for="revTruck" id="lblRevTruck"></label>
+          <input id="revTruck" type="file" accept="image/*">
+          <label for="revMenu" id="lblRevMenu"></label>
+          <input id="revMenu" type="file" accept="image/*">
+          <p class="form-error" id="revStatus" role="status"></p>
+          <button class="btn solid" type="submit" id="revSend"></button>
+        </form>
+      </section>
     </aside>
   </main>
 
   <dialog class="detail" id="detail">
     <button class="close" type="button" id="detailClose" aria-label="Stäng">×</button>
     <img id="detailPhoto" alt="" hidden>
-    <p class="badge" id="detailBadge" hidden></p>
+    <img id="detailFood" alt="" hidden>
     <h2 id="detailName"></h2>
     <p class="detail-city" id="detailCity"></p>
     <p id="detailHours"></p>
     <p id="detailWhen"></p>
-    <p class="status-line" id="detailStatus"></p>
     <button class="btn danger" type="button" id="detailDelete" hidden></button>
   </dialog>
 
