@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Foodtruckheaven.com</title>
+  <meta name="description" content="Foodtruckheaven.com visar foodtrucks i Sverige eller Norge, beroende på var du är. Truckägare lägger in bild, plats och öppettider. Besökare ser kartan.">
+  <link rel="canonical" href="https://jonathan67-1337.github.io/foodtruckheaven/">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <meta name="theme-color" content="#f4efe6">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bowlby+One&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <a class="skip" href="#map" id="skipLink">Hoppa till kartan</a>
+
+  <header class="top" id="top">
+    <div class="awning" aria-hidden="true"></div>
+    <div class="top-inner">
+      <div class="brand-row">
+        <a class="brand" href="#top">Foodtruckheaven.com</a>
+        <div class="country" role="group" id="countryGroup" aria-label="Land">
+          <button type="button" data-country="SE" id="countrySE">Sverige</button>
+          <button type="button" data-country="NO" id="countryNO">Norge</button>
+        </div>
+      </div>
+      <div class="choices" role="group" aria-label="Ingång">
+        <button type="button" class="choice owner" id="btnOwner">Foodtruck</button>
+        <button type="button" class="choice visitor" id="btnVisitor" aria-pressed="true">Besökare</button>
+      </div>
+      <p class="tagline" id="tagline"></p>
+    </div>
+  </header>
+
+  <section class="owner-panel" id="ownerPanel" hidden>
+    <form class="owner-form" id="ownerForm">
+      <h2 id="ownerTitle"></h2>
+      <p class="help" id="ownerHelp"></p>
+
+      <label for="truckName" id="lblName"></label>
+      <input id="truckName" name="name" type="text" maxlength="60" autocomplete="organization" required>
+
+      <label for="truckBlurb" id="lblBlurb"></label>
+      <input id="truckBlurb" name="blurb" type="text" maxlength="120">
+
+      <label for="truckPhoto" id="lblPhoto"></label>
+      <input id="truckPhoto" name="photo" type="file" accept="image/*">
+      <img id="photoPreview" alt="" hidden>
+
+      <label for="truckCity" id="lblCity"></label>
+      <input id="truckCity" name="city" type="text" maxlength="40" required>
+
+      <p class="pin-status" id="pinStatus"></p>
+      <button class="btn ghost" type="button" id="pickPlace"></button>
+
+      <fieldset>
+        <legend id="lblWhen"></legend>
+        <label class="radio"><input type="radio" name="span" value="one" checked> <span id="lblOneDay"></span></label>
+        <label class="radio"><input type="radio" name="span" value="many"> <span id="lblManyDays"></span></label>
+      </fieldset>
+
+      <div class="dates" id="oneFields">
+        <label for="oneDate" id="lblDate"></label>
+        <input id="oneDate" name="oneDate" type="date" required>
+      </div>
+      <div class="dates two" id="manyFields" hidden>
+        <div>
+          <label for="startDate" id="lblFrom"></label>
+          <input id="startDate" name="startDate" type="date">
+        </div>
+        <div>
+          <label for="endDate" id="lblTo"></label>
+          <input id="endDate" name="endDate" type="date">
+        </div>
+      </div>
+
+      <div class="dates two">
+        <div>
+          <label for="openFrom" id="lblOpen"></label>
+          <input id="openFrom" name="openFrom" type="time" value="11:00" required>
+        </div>
+        <div>
+          <label for="openTo" id="lblClose"></label>
+          <input id="openTo" name="openTo" type="time" value="20:00" required>
+        </div>
+      </div>
+
+      <p class="form-error" id="formError" role="alert"></p>
+      <div class="form-actions">
+        <button class="btn solid" type="submit" id="saveTruck"></button>
+        <button class="btn ghost" type="button" id="cancelOwner"></button>
+      </div>
+    </form>
+  </section>
+
+  <div class="place-banner" id="placeBanner" hidden>
+    <p id="placeText"></p>
+    <button class="btn solid" type="button" id="cancelPlace"></button>
+  </div>
+
+  <main class="layout">
+    <section class="map-wrap">
+      <div id="map" role="application" aria-label="Karta"></div>
+    </section>
+    <aside class="list-wrap" aria-labelledby="listHeading">
+      <div class="list-head">
+        <h2 id="listHeading"></h2>
+        <div class="filters" role="group" id="filterGroup">
+          <button type="button" data-filter="all" id="filterAll" aria-pressed="true"></button>
+          <button type="button" data-filter="today" id="filterToday" aria-pressed="false"></button>
+        </div>
+      </div>
+      <p class="summary" id="listSummary"></p>
+      <ul class="trucks" id="truckList"></ul>
+    </aside>
+  </main>
+
+  <dialog class="detail" id="detail">
+    <button class="close" type="button" id="detailClose" aria-label="Stäng">×</button>
+    <img id="detailPhoto" alt="" hidden>
+    <p class="badge" id="detailBadge" hidden></p>
+    <h2 id="detailName"></h2>
+    <p class="detail-city" id="detailCity"></p>
+    <p id="detailBlurb"></p>
+    <p id="detailHours"></p>
+    <p id="detailWhen"></p>
+    <p class="status-line" id="detailStatus"></p>
+    <button class="btn danger" type="button" id="detailDelete" hidden></button>
+  </dialog>
+
+  <footer>
+    <div class="top-inner">
+      <p id="footerNote"></p>
+      <p>Foodtruckheaven.com</p>
+    </div>
+  </footer>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+  <script src="script.js"></script>
+</body>
+</html>

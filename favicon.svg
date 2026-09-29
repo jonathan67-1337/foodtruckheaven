@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" role="img" aria-label="Foodtruckheaven.com">
+  <rect width="32" height="32" rx="6" fill="#1a120b"/>
+  <rect x="4" y="12" width="16" height="9" rx="1.5" fill="#f2b705"/>
+  <path d="M20 14h5.2l2.3 3.2V21H20z" fill="#e23c22"/>
+  <circle cx="10" cy="22.5" r="2.2" fill="#f4efe6"/>
+  <circle cx="23" cy="22.5" r="2.2" fill="#f4efe6"/>
+  <rect x="6.5" y="14" width="6" height="4" rx="0.6" fill="#1a120b"/>
+</svg>
