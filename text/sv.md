@@ -51,7 +51,7 @@ Ja skapar ingen kod.
 
 ### Första gången för foodtruck
 
-Det här är inte en inloggning. Ingen knapp för Apple eller Google. Svaren syns på den här truckens sida. Visa bara det ägaren faktiskt har svarat.
+Första gången en foodtruck loggar in kommer de här tre frågorna. Svaren syns på den här truckens sida. Visa bara det ägaren faktiskt har svarat.
 
 Fråga 1: Vilken streetfood serverar du?
 
@@ -70,6 +70,18 @@ Fråga 3: Vilken stad står du oftast i?
 Alternativen är stadsnamn från stadsregistret för landet trucken är i. Högst tio. Finns färre, visa bara dem. Inga påhittade städer.
 
 På sidan: Står oftast i {stad}. Har ägaren inte valt någon stad, skriv inget.
+
+### Logga in
+
+Knapp: Logga in
+
+Rad: Fortsätt med Apple
+
+Rad: Fortsätt med Google
+
+Rad: Fortsätt med e-post
+
+Skriv inte att någon är inloggad.
 
 ### Besökare
 
@@ -315,6 +327,10 @@ Mening: Länken är den ägaren själv har klistrat in.
 
 ### Recension
 
+Knapp: Skriv en recension
+
+Mening: Formuläret syns först efter klick.
+
 Rubrik: Recension
 
 Brödtext: En recension är tre bilder som besökaren själv lägger in. En på maten, en på foodtrucken och en på menyn. Ingen text, och inga andra recensioner.
@@ -335,6 +351,6 @@ Tom: Ingen recension är inlagd.
 
 ## Inte på sidan
 
-Inloggning med Apple eller Google finns inte. Mejl när en favorit öppnar finns inte. Skriv inte Fortsätt med Apple eller Fortsätt med Google.
+Skriv inte att någon är inloggad. Mejl när en favorit öppnar finns inte.
 
 Inga påhittade trucks, menyer, priser, rabattkoder, platser, tider eller recensioner. En förfrågan om rabattkod skapar ingen kod. En truck syns bara om ägaren själv har lagt in den. Att ändra en truck skapar ingen ny truck, inget nytt omdöme och ingen ny kod. En recension syns bara om en besökare själv har lagt in de tre bilderna. En rabattkod syns bara för den som har trucken som favorit, och bara om ägaren har lagt in en kod.
