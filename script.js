@@ -576,6 +576,11 @@
     if (!isFinite(km)) return "";
     return km.toFixed(1).replace(".", ",") + " km";
   }
+  function distanceListText(tr) {
+    var dist = distanceLabel(tr);
+    if (!dist) return "";
+    return dist + " bort";
+  }
   function daysRemaining(tr, now) {
     var today = isoDate(now || new Date());
     var dates = tr && tr.dates || [];
@@ -773,12 +778,21 @@
     try { return localStorage.getItem(STORAGE_OWNER_ASKED) === "1"; } catch (e) { return false; }
   }
   function openFromHash() {
+    var note = $("missingTruck");
     var m = /^#truck=(.+)$/.exec(location.hash || "");
-    if (!m || !map) return;
+    if (!m) {
+      if (note) note.hidden = true;
+      return;
+    }
     var id = decodeURIComponent(m[1]);
     var tr = null;
     allTrucks().forEach(function (item) { if (item.id === id) tr = item; });
-    if (!tr || tr.country !== state.country || !insideCountry(tr.lat, tr.lng)) return;
+    if (!tr) {
+      if (note) note.hidden = false;
+      return;
+    }
+    if (note) note.hidden = true;
+    if (!map || tr.country !== state.country || !insideCountry(tr.lat, tr.lng)) return;
     map.setView([tr.lat, tr.lng], 14);
     openDetail(tr);
   }
@@ -814,6 +828,12 @@
     if (state.foodFilter) {
       list = list.filter(function (tr) {
         return Array.isArray(tr.foods) && tr.foods.indexOf(state.foodFilter) !== -1;
+      });
+    }
+    var q = ($("recentSearch") && $("recentSearch").value || "").trim().toLowerCase();
+    if (q) {
+      list = list.filter(function (tr) {
+        return (tr.name || "").toLowerCase().indexOf(q) !== -1 || (tr.city || "").toLowerCase().indexOf(q) !== -1;
       });
     }
     list.sort(function (a, b) {
@@ -861,9 +881,10 @@
     var emptyText = t("emptyAll");
     if (state.filter === "now") emptyText = t("emptyNow");
     else if (state.filter === "today" && inCountry(allTrucks()).length) emptyText = t("emptyToday");
+    var searching = ($("recentSearch") && $("recentSearch").value || "").trim();
     $("listSummary").textContent = list.length
       ? (countryName ? countryName + " · " + countLine : countLine)
-      : emptyText;
+      : (searching ? countLine : emptyText);
 
     var ul = $("truckList");
     ul.textContent = "";
@@ -889,7 +910,7 @@
       var meta = document.createElement("p");
       meta.className = "meta";
       meta.textContent = tr.city + " · " + t("hours").replace("{from}", tr.hours.from).replace("{to}", tr.hours.to);
-      var dist = distanceLabel(tr);
+      var dist = distanceListText(tr);
       if (dist) meta.textContent += " · " + dist;
       body.appendChild(h);
       body.appendChild(meta);
@@ -955,7 +976,7 @@
       var meta = document.createElement("p");
       meta.className = "meta";
       meta.textContent = tr.city + " · " + t("hours").replace("{from}", tr.hours.from).replace("{to}", tr.hours.to);
-      var dist = distanceLabel(tr);
+      var dist = distanceListText(tr);
       if (dist) meta.textContent += " · " + dist;
       body.appendChild(h);
       body.appendChild(meta);
@@ -1405,7 +1426,7 @@
       var meta = document.createElement("p");
       meta.className = "meta";
       meta.textContent = tr.city + " · " + t("hours").replace("{from}", tr.hours.from).replace("{to}", tr.hours.to);
-      var dist = distanceLabel(tr);
+      var dist = distanceListText(tr);
       if (dist) meta.textContent += " · " + dist;
       body.appendChild(h);
       body.appendChild(meta);
@@ -1607,7 +1628,7 @@
       var dlg = $("ownerQuiz");
       if (dlg.open) dlg.close();
     });
-    $("recentSearch").addEventListener("input", function () { renderUnderMap(); });
+    $("recentSearch").addEventListener("input", function () { render(); });
     $("showMe").addEventListener("click", function () {
       if (!navigator.geolocation || !map) return;
       navigator.geolocation.getCurrentPosition(function (pos) {
