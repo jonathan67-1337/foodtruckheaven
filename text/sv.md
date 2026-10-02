@@ -223,6 +223,11 @@ Mening: Kopierar en länk till den här trucken på kartan.
 
 Kopierad: Länken är kopierad.
 
+### Länk utan truck
+
+Mening: Den här trucken finns inte i den här webbläsaren.
+
+
 
 ### Favorit
 
