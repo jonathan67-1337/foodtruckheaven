@@ -201,6 +201,12 @@ Knapp: Visa var jag är
 
 Mening: Centrerar kartan på din position.
 
+### Avstånd
+
+Fras: {avstånd} bort
+
+{avstånd} är talet sidan redan räknar ut, med kommatecken och km. Till exempel 3,4 km bort. Hitta inte på ett avstånd. Saknas besökarens position, skriv inget.
+
 ### Ändra truck
 
 Knapp: Ändra truck
