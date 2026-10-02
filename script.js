@@ -227,6 +227,7 @@
   var STORAGE_OWNER_ASKED = "foodtruckheaven.ownerAsked.v1";
   var quizPick = { food: "", city: "", discount: "" };
   var quizForce = false;
+  var revFormOpen = false;
   var ownerPick = { foods: [], line: "", city: "" };
 
   var state = {
@@ -1455,13 +1456,11 @@
 
     var revEmpty = $("revEmpty");
     var revList = $("revList");
+    var revForm = $("revForm");
+    if (revForm) revForm.hidden = !revFormOpen;
     revList.textContent = "";
     var revs = loadJson(STORAGE_REV).filter(function (r) { return r.truckId === selectedId; });
-    if (!selectedId || !revs.length) {
-      revEmpty.hidden = false;
-      revEmpty.textContent = t("revEmpty");
-    } else {
-      revEmpty.hidden = true;
+    if (selectedId && revs.length) {
       revs.forEach(function (r) {
         var set = document.createElement("div");
         set.className = "rev-set";
@@ -1474,6 +1473,12 @@
         });
         revList.appendChild(set);
       });
+    }
+    if (!revFormOpen || (selectedId && revs.length)) {
+      revEmpty.hidden = true;
+    } else {
+      revEmpty.hidden = false;
+      revEmpty.textContent = t("revEmpty");
     }
   }
 
@@ -1578,6 +1583,14 @@
     });
     $("btnVisitor").addEventListener("click", function () { setMode("visitor"); });
     $("openSettings").addEventListener("click", function () { $("settings").showModal(); });
+    $("loginBtn").addEventListener("click", function () {
+      $("loginChoices").hidden = false;
+    });
+    $("revOpen").addEventListener("click", function () {
+      revFormOpen = true;
+      $("revForm").hidden = false;
+      renderExtras();
+    });
     $("editAnswers").addEventListener("click", function () {
       quizForce = true;
       try {

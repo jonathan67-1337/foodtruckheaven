@@ -67,6 +67,10 @@ button { cursor: pointer; }
 }
 .country select { border: 0; max-width: 14rem; }
 .settings-btn { border-color: var(--hairline); background: var(--surface); }
+.brand-actions { display: flex; flex-wrap: wrap; align-items: flex-start; justify-content: flex-end; gap: 8px; }
+.brand-actions #loginChoices { display: flex; flex-direction: column; gap: 8px; width: 100%; }
+.brand-actions #loginChoices[hidden] { display: none; }
+.brand-actions #loginChoices .btn { width: 100%; text-align: left; }
 .country button[aria-pressed="true"] { background: var(--ink); color: var(--surface); }
 
 .choices { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 14px; }
@@ -120,6 +124,7 @@ input:focus-visible, select:focus-visible { outline: 2px solid var(--forest); ou
 .btn.ghost { background: var(--surface); color: var(--ink); border-color: var(--hairline); }
 .btn.ghost:hover { background: #f3efe9; }
 .btn.danger { background: var(--danger); color: #fff; border-color: var(--danger); margin-top: 10px; }
+#revOpen { margin: 0 0 12px; }
 .btn.danger:hover { background: #842c1a; border-color: #842c1a; }
 .mini { margin-top: 0; min-height: 36px; padding: 6px 12px; border-radius: 999px; font-size: 0.9rem; }
 .place-banner {

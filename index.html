@@ -34,7 +34,15 @@
     <div class="top-inner">
       <div class="brand-row">
         <a class="brand" href="#top">Foodtruckheaven.com</a>
-        <button type="button" class="settings-btn" id="openSettings">Inställningar</button>
+        <div class="brand-actions">
+          <button type="button" class="settings-btn" id="openSettings">Inställningar</button>
+          <button type="button" class="settings-btn" id="loginBtn">Logga in</button>
+          <div id="loginChoices" hidden>
+            <button type="button" class="btn ghost">Fortsätt med Apple</button>
+            <button type="button" class="btn ghost">Fortsätt med Google</button>
+            <button type="button" class="btn ghost">Fortsätt med e-post</button>
+          </div>
+        </div>
       </div>
       <div class="choices" role="group" aria-label="Ingång">
         <button type="button" class="choice owner" id="btnOwner">Foodtruck</button>
@@ -223,17 +231,19 @@
       <section class="side-block" id="revSection">
         <h2 id="revTitle">Recension</h2>
         <p class="help" id="revBody"></p>
-        <p class="summary" id="revEmpty"></p>
+        <p>Formuläret syns först efter klick.</p>
+        <button type="button" class="btn solid" id="revOpen">Skriv en recension</button>
+        <p class="summary" id="revEmpty" hidden></p>
         <div id="revList"></div>
-        <form id="revForm">
-          <label for="revFood" id="lblRevFood"></label>
+        <form id="revForm" hidden>
+          <label for="revFood" id="lblRevFood">Maten</label>
           <input id="revFood" type="file" accept="image/*">
-          <label for="revTruck" id="lblRevTruck"></label>
+          <label for="revTruck" id="lblRevTruck">Foodtrucken</label>
           <input id="revTruck" type="file" accept="image/*">
-          <label for="revMenu" id="lblRevMenu"></label>
+          <label for="revMenu" id="lblRevMenu">Menyn</label>
           <input id="revMenu" type="file" accept="image/*">
           <p class="form-error" id="revStatus" role="status"></p>
-          <button class="btn solid" type="submit" id="revSend"></button>
+          <button class="btn solid" type="submit" id="revSend">Skicka recension</button>
         </form>
       </section>
     </aside>
@@ -279,7 +289,7 @@
     <div class="quiz-q" id="quizCode"></div>
   </dialog>
   <dialog class="detail quiz" id="ownerQuiz">
-    <p>Det här är inte en inloggning. Ingen knapp för Apple eller Google. Svaren syns på den här truckens sida. Visa bara det ägaren faktiskt har svarat.</p>
+    <p>Första gången en foodtruck loggar in kommer de här tre frågorna. Svaren syns på den här truckens sida. Visa bara det ägaren faktiskt har svarat.</p>
     <p>Vilken streetfood serverar du?</p>
     <div class="quiz-q" id="oqFood"></div>
     <p>Skriv en kort rad om trucken.</p>
