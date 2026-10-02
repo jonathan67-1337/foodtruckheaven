@@ -95,6 +95,7 @@
       needName: "Skriv vad foodtrucken heter.",
       needCity: "Skriv platsen med ord.",
       needPin: "Klicka på kartan och sätt platsen.",
+      pinOutside: "Nålen måste vara innanför det valda landet.",
       needDate: "Välj en dag.",
       needRange: "Välj från och till.",
       badRange: "Slutdagen måste vara samma dag eller senare.",
@@ -195,6 +196,7 @@
       needName: "Skriv hva foodtrucken heter.",
       needCity: "Skriv stedet med ord.",
       needPin: "Klikk på kartet og sett stedet.",
+      pinOutside: "Nålen må være innenfor det valgte landet.",
       needDate: "Velg en dag.",
       needRange: "Velg fra og til.",
       badRange: "Sluttdagen må være samme dag eller senere.",
@@ -477,34 +479,39 @@
     if (typeof lat !== "number" || typeof lng !== "number" || !isFinite(lat) || !isFinite(lng)) return false;
     return bounds.contains(L.latLng(lat, lng));
   }
+  function mapLaidOut() {
+    if (!map) return false;
+    var size = map.getSize();
+    return !!(size && size.x >= 80 && size.y >= 200);
+  }
   function applyCountryLock() {
     if (!map || !loadedCountry(state.country)) return;
     var bounds = countryLatLngBounds(state.country);
     if (!bounds || !bounds.isValid()) return;
-    var size = map.getSize();
-    if (!size || !size.x || !size.y) return;
-    map.setMinZoom(0);
-    var zoom = map.getBoundsZoom(bounds);
+    if (!mapLaidOut()) {
+      map.setMinZoom(0);
+      return;
+    }
     map.options.maxBoundsViscosity = 1;
     map.setMaxBounds(bounds.pad(0.05));
-    if (typeof zoom === "number" && isFinite(zoom)) {
-      var maxZ = map.getMaxZoom();
-      if (typeof maxZ === "number" && zoom > maxZ) zoom = maxZ;
-      map.setMinZoom(zoom);
-    }
+  }
+  function layoutMap() {
+    if (!map) return;
+    map.invalidateSize();
+    if (!loadedCountry(state.country)) return;
+    if (!mapLaidOut()) return;
+    map.setMinZoom(0);
+    applyCountryLock();
+    var bounds = countryLatLngBounds(state.country);
+    if (!bounds) return;
+    map.fitBounds(bounds, { padding: [24, 24] });
+    var zoom = map.getZoom();
+    if (typeof zoom === "number" && isFinite(zoom)) map.setMinZoom(zoom);
   }
   function focusMap(point) {
     if (!map) return;
     if (loadedCountry(state.country)) {
-      applyCountryLock();
-      var trucks = inCountry(allTrucks());
-      if (trucks.length) {
-        var latlngs = trucks.map(function (tr) { return [tr.lat, tr.lng]; });
-        map.fitBounds(L.latLngBounds(latlngs), { padding: [24, 24], maxZoom: 13 });
-        return;
-      }
-      var bounds = countryLatLngBounds(state.country);
-      if (bounds) map.fitBounds(bounds, { padding: [24, 24] });
+      layoutMap();
       return;
     }
     if (point && typeof point.lat === "number" && typeof point.lng === "number" && insideCountry(point.lat, point.lng)) {
@@ -1215,6 +1222,12 @@
     if (!name) { err.textContent = t("needName"); return; }
     if (!city) { err.textContent = t("needCity"); return; }
     if (!state.pin) { err.textContent = t("needPin"); return; }
+    if (!insideCountry(state.pin.lat, state.pin.lng)) {
+      state.pin = null;
+      updatePinStatus();
+      err.textContent = t("pinOutside");
+      return;
+    }
     var from = $("openFrom").value;
     var to = $("openTo").value;
     if (!from || !to || minutes(to) <= minutes(from)) { err.textContent = t("badHours"); return; }
@@ -1565,10 +1578,19 @@
     markers = L.layerGroup().addTo(map);
     map.on("click", function (ev) {
       if (!state.placing) return;
-      state.pin = { lat: Math.round(ev.latlng.lat * 10000) / 10000, lng: Math.round(ev.latlng.lng * 10000) / 10000 };
+      var lat = Math.round(ev.latlng.lat * 10000) / 10000;
+      var lng = Math.round(ev.latlng.lng * 10000) / 10000;
+      if (!insideCountry(lat, lng)) {
+        var msg = t("pinOutside");
+        if ($("formError")) $("formError").textContent = msg;
+        if ($("placeText")) $("placeText").textContent = msg;
+        return;
+      }
+      state.pin = { lat: lat, lng: lng };
       stopPlacing();
       $("ownerPanel").hidden = false;
       updatePinStatus();
+      if ($("formError")) $("formError").textContent = "";
       setTimeout(function () { map.invalidateSize(); }, 40);
     });
     map.setView([20, 0], 2);
@@ -1707,6 +1729,8 @@
     }).then(function (found) {
       if (found && loadedCountry(found.code)) {
         setCountry(found.code, false, found.point);
+        if (map) map.invalidateSize();
+        layoutMap();
         return;
       }
       state.outside = false;
@@ -1723,6 +1747,13 @@
       openFromHash();
     });
   }
+
+  window.addEventListener("load", function () {
+    if (!map) return;
+    map.invalidateSize();
+    if (loadedCountry(state.country)) layoutMap();
+    openFromHash();
+  });
 
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init);
   else init();
