@@ -347,7 +347,9 @@
     return loadOwn();
   }
   function inCountry(list) {
-    return list.filter(function (tr) { return state.country && tr.country === state.country; });
+    return list.filter(function (tr) {
+      return state.country && tr.country === state.country && insideCountry(tr.lat, tr.lng);
+    });
   }
   function isOwnId(id) {
     var found = false;
@@ -459,23 +461,52 @@
   }
   function showWorld() {
     if (!map) return;
+    if (loadedCountry(state.country)) return;
     if (typeof map.fitWorld === "function") map.fitWorld();
     else map.setView([20, 0], 2);
   }
+  function countryLatLngBounds(code) {
+    var box = boundsBox(code);
+    if (!box) return null;
+    return L.latLngBounds([box[1], box[0]], [box[3], box[2]]);
+  }
+  function insideCountry(lat, lng) {
+    var bounds = countryLatLngBounds(state.country);
+    if (!bounds) return true;
+    if (typeof lat !== "number" || typeof lng !== "number" || !isFinite(lat) || !isFinite(lng)) return false;
+    return bounds.contains(L.latLng(lat, lng));
+  }
+  function applyCountryLock() {
+    if (!map || !loadedCountry(state.country)) return;
+    var bounds = countryLatLngBounds(state.country);
+    if (!bounds || !bounds.isValid()) return;
+    var size = map.getSize();
+    if (!size || !size.x || !size.y) return;
+    map.setMinZoom(0);
+    var zoom = map.getBoundsZoom(bounds);
+    map.options.maxBoundsViscosity = 1;
+    map.setMaxBounds(bounds.pad(0.05));
+    if (typeof zoom === "number" && isFinite(zoom)) {
+      var maxZ = map.getMaxZoom();
+      if (typeof maxZ === "number" && zoom > maxZ) zoom = maxZ;
+      map.setMinZoom(zoom);
+    }
+  }
   function focusMap(point) {
     if (!map) return;
-    var trucks = state.country ? inCountry(allTrucks()) : [];
-    if (trucks.length) {
-      var latlngs = trucks.map(function (tr) { return [tr.lat, tr.lng]; });
-      map.fitBounds(L.latLngBounds(latlngs), { padding: [24, 24], maxZoom: 13 });
+    if (loadedCountry(state.country)) {
+      applyCountryLock();
+      var trucks = inCountry(allTrucks());
+      if (trucks.length) {
+        var latlngs = trucks.map(function (tr) { return [tr.lat, tr.lng]; });
+        map.fitBounds(L.latLngBounds(latlngs), { padding: [24, 24], maxZoom: 13 });
+        return;
+      }
+      var bounds = countryLatLngBounds(state.country);
+      if (bounds) map.fitBounds(bounds, { padding: [24, 24] });
       return;
     }
-    var box = boundsBox(state.country);
-    if (box) {
-      map.fitBounds([[box[1], box[0]], [box[3], box[2]]], { padding: [24, 24] });
-      return;
-    }
-    if (point && typeof point.lat === "number" && typeof point.lng === "number") {
+    if (point && typeof point.lat === "number" && typeof point.lng === "number" && insideCountry(point.lat, point.lng)) {
       map.setView([point.lat, point.lng], 6);
       return;
     }
@@ -569,7 +600,8 @@
       btn.type = "button";
       btn.textContent = city.n;
       btn.addEventListener("click", function () {
-        if (map) map.setView([city.lat, city.lng], 12);
+        if (!map || !insideCountry(city.lat, city.lng)) return;
+        map.setView([city.lat, city.lng], 12);
       });
       row.appendChild(btn);
     });
@@ -745,7 +777,7 @@
     var id = decodeURIComponent(m[1]);
     var tr = null;
     allTrucks().forEach(function (item) { if (item.id === id) tr = item; });
-    if (!tr) return;
+    if (!tr || tr.country !== state.country || !insideCountry(tr.lat, tr.lng)) return;
     map.setView([tr.lat, tr.lng], 14);
     openDetail(tr);
   }
@@ -1496,7 +1528,10 @@
   }
 
   function initMap() {
-    map = L.map("map", { scrollWheelZoom: true });
+    map = L.map("map", { scrollWheelZoom: false, dragging: true });
+    map.getContainer().addEventListener("wheel", function (ev) {
+      if (ev.cancelable) ev.stopImmediatePropagation();
+    }, { capture: true, passive: true });
     L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
       maxZoom: 19,
       attribution: "&copy; OpenStreetMap"
@@ -1563,7 +1598,12 @@
     $("showMe").addEventListener("click", function () {
       if (!navigator.geolocation || !map) return;
       navigator.geolocation.getCurrentPosition(function (pos) {
-        map.setView([pos.coords.latitude, pos.coords.longitude], 14);
+        if (!pos || !pos.coords) return;
+        var lat = pos.coords.latitude;
+        var lng = pos.coords.longitude;
+        if (typeof lat !== "number" || typeof lng !== "number") return;
+        if (!insideCountry(lat, lng)) return;
+        map.setView([lat, lng], 14);
       }, function () {});
     });
     var quizDlg = $("quiz");
