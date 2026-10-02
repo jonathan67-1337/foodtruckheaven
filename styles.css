@@ -251,7 +251,7 @@ footer p { margin: 0.2rem 0; }
 .cities button {
   flex: 0 0 auto;
   border: 2px solid var(--ink);
-  background: var(--paper-2);
+  background: var(--surface);
   border-radius: 999px;
   padding: 6px 12px;
   font-weight: 700;
