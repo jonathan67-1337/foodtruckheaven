@@ -42,11 +42,13 @@
         <a class="brand" href="#top">Foodtruckheaven.com</a>
         <div class="brand-actions">
           <button type="button" class="settings-btn" id="openSettings">Inställningar</button>
-          <button type="button" class="settings-btn" id="loginBtn">Logga in</button>
-          <div id="loginChoices" hidden>
-            <button type="button" class="btn ghost">Fortsätt med Apple</button>
-            <button type="button" class="btn ghost">Fortsätt med Google</button>
-            <button type="button" class="btn ghost">Fortsätt med e-post</button>
+          <div class="login-slot">
+            <button type="button" class="settings-btn" id="loginBtn">Logga in</button>
+            <div id="loginChoices" hidden>
+              <button type="button" class="btn ghost">Fortsätt med Apple</button>
+              <button type="button" class="btn ghost">Fortsätt med Google</button>
+              <button type="button" class="btn ghost">Fortsätt med e-post</button>
+            </div>
           </div>
         </div>
       </div>
@@ -239,7 +241,6 @@
       <section class="side-block" id="revSection">
         <h2 id="revTitle">Recension</h2>
         <p class="help" id="revBody"></p>
-        <p>Formuläret syns först efter klick.</p>
         <button type="button" class="btn solid" id="revOpen">Skriv en recension</button>
         <p class="summary" id="revEmpty" hidden></p>
         <div id="revList"></div>

@@ -1626,9 +1626,16 @@
     });
     $("btnVisitor").addEventListener("click", function () { setMode("visitor"); });
     $("openSettings").addEventListener("click", function () { $("settings").showModal(); });
-    $("loginBtn").addEventListener("click", function () {
+    $("loginBtn").addEventListener("click", function (ev) {
+      ev.preventDefault();
       $("loginChoices").hidden = false;
     });
+    var loginChoiceBtns = $("loginChoices").querySelectorAll("button");
+    for (var li = 0; li < loginChoiceBtns.length; li++) {
+      loginChoiceBtns[li].addEventListener("click", function (ev) {
+        ev.preventDefault();
+      });
+    }
     $("revOpen").addEventListener("click", function () {
       revFormOpen = true;
       $("revForm").hidden = false;
