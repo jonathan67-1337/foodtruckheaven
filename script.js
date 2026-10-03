@@ -483,31 +483,47 @@
   function mapLaidOut() {
     if (!map) return false;
     var size = map.getSize();
-    return !!(size && size.x >= 80 && size.y >= 200);
+    return !!(size && size.x >= 80 && size.y >= 440);
   }
-  function applyCountryLock() {
+  function applyCountryLock(recenter) {
     if (!map || !loadedCountry(state.country)) return;
     var bounds = countryLatLngBounds(state.country);
     if (!bounds || !bounds.isValid()) return;
-    if (!mapLaidOut()) {
-      map.setMinZoom(0);
-      return;
-    }
+    map.invalidateSize();
+    if (!mapLaidOut()) return;
+    map.setMinZoom(0);
+    var zoom = map.getBoundsZoom(bounds, true);
+    if (typeof zoom !== "number" || !isFinite(zoom)) return;
     map.options.maxBoundsViscosity = 1;
     map.setMaxBounds(bounds.pad(0.05));
+    map.setMinZoom(zoom);
+    if (recenter === false) {
+      var current = map.getZoom();
+      if (typeof current !== "number" || !isFinite(current) || current < zoom) {
+        map.setView(bounds.getCenter(), zoom, { animate: false });
+      }
+      return;
+    }
+    map.setView(bounds.getCenter(), zoom, { animate: false });
   }
-  function layoutMap() {
+  function layoutMap(recenter) {
     if (!map) return;
     map.invalidateSize();
     if (!loadedCountry(state.country)) return;
-    if (!mapLaidOut()) return;
-    map.setMinZoom(0);
-    applyCountryLock();
-    var bounds = countryLatLngBounds(state.country);
-    if (!bounds) return;
-    map.fitBounds(bounds, { padding: [24, 24] });
-    var zoom = map.getZoom();
-    if (typeof zoom === "number" && isFinite(zoom)) map.setMinZoom(zoom);
+    if (!mapLaidOut()) {
+      if (!layoutMap.waiting) {
+        layoutMap.waiting = true;
+        requestAnimationFrame(function () {
+          layoutMap.waiting = false;
+          if (!map) return;
+          map.invalidateSize();
+          if (!mapLaidOut()) return;
+          applyCountryLock(recenter);
+        });
+      }
+      return;
+    }
+    applyCountryLock(recenter);
   }
   function focusMap(point) {
     if (!map) return;
@@ -1761,6 +1777,12 @@
     map.invalidateSize();
     if (loadedCountry(state.country)) layoutMap();
     openFromHash();
+  });
+  var mapResizeTimer = null;
+  window.addEventListener("resize", function () {
+    if (!map) return;
+    clearTimeout(mapResizeTimer);
+    mapResizeTimer = setTimeout(function () { layoutMap(false); }, 80);
   });
 
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init);
