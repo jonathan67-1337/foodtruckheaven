@@ -387,8 +387,10 @@ footer p { margin: 0.2rem 0; }
 .choices { display: flex; gap: 8px; margin: 0; }
 .choice { min-height: 40px; border-radius: 999px; font-size: 0.95rem; font-weight: 600; padding: 6px 16px; }
 .page-title {
-  position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
-  overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0;
+  position: static; width: auto; height: auto; overflow: visible; clip: auto;
+  margin: 0; padding: 28px 32px 20px;
+  font-size: 1.2rem; font-weight: 600; letter-spacing: -0.02em; line-height: 1.4;
+  color: var(--ink); max-width: 40rem;
 }
 .layout { display: block !important; }
 #map, #map.leaflet-container, .leaflet-container { height: 75vh !important; min-height: 480px !important; width: 100%; }
