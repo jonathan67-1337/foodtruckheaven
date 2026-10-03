@@ -419,3 +419,7 @@ footer p { margin: 0.2rem 0; }
   .top-inner { flex-wrap: wrap; padding: 0 16px; }
   .below, .list-wrap { width: min(720px, calc(100% - 32px)) !important; }
 }
+
+@media (min-width: 900px) {
+  .layout { display: block; }
+}
