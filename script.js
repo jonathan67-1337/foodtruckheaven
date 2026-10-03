@@ -1763,8 +1763,6 @@
       applyCopy();
       showWorld();
       render();
-      var dlg = $("settings");
-      if (dlg && dlg.showModal) dlg.showModal();
     }).then(function () {
       buildFoodChecks();
       renderQuiz();

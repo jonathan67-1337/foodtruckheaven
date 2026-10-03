@@ -38,23 +38,21 @@
   <header class="top" id="top">
     <div class="awning" aria-hidden="true"></div>
     <div class="top-inner">
-      <div class="brand-row">
-        <a class="brand" href="#top">Foodtruckheaven.com</a>
-        <div class="brand-actions">
-          <button type="button" class="settings-btn" id="openSettings">Inställningar</button>
-          <div class="login-slot">
-            <button type="button" class="settings-btn" id="loginBtn">Logga in</button>
-            <div id="loginChoices" hidden>
-              <button type="button" class="btn ghost">Fortsätt med Apple</button>
-              <button type="button" class="btn ghost">Fortsätt med Google</button>
-              <button type="button" class="btn ghost">Fortsätt med e-post</button>
-            </div>
-          </div>
-        </div>
-      </div>
+      <a class="brand" href="#top">Foodtruckheaven.com</a>
       <div class="choices" role="group" aria-label="Ingång">
         <button type="button" class="choice owner" id="btnOwner">Foodtruck</button>
         <button type="button" class="choice visitor" id="btnVisitor" aria-pressed="true">Besökare</button>
+      </div>
+      <div class="brand-actions">
+        <button type="button" class="settings-btn" id="openSettings">Inställningar</button>
+        <div class="login-slot">
+          <button type="button" class="settings-btn" id="loginBtn">Logga in</button>
+          <div id="loginChoices" hidden>
+            <button type="button" class="btn ghost">Fortsätt med Apple</button>
+            <button type="button" class="btn ghost">Fortsätt med Google</button>
+            <button type="button" class="btn ghost">Fortsätt med e-post</button>
+          </div>
+        </div>
       </div>
     </div>
   </header>
@@ -168,9 +166,11 @@
 
   <main class="layout">
     <section class="map-wrap">
+      <div id="map" role="application" aria-label="Karta"></div>
+    </section>
+    <section class="below">
       <button type="button" class="btn ghost" id="showMe">Visa var jag är</button>
       <p class="help">Centrerar kartan på din position.</p>
-      <div id="map" role="application" aria-label="Karta"></div>
       <p class="summary" id="missingTruck" hidden>Den här trucken finns inte i den här webbläsaren.</p>
       <h2 class="owner-pitch" id="ownerPitch">Marknadsför din foodtruck gratis</h2>
       <p class="tagline" id="ownerPitchBody">Du marknadsför din foodtruck gratis genom att lägga in namn, bilder på trucken, bilder på maten, plats och öppettider. Besökare i samma land hittar dig på kartan. Besökare i ett annat land ser dig inte. Besökaren ser bara det du lägger in: namn, bilder, plats och öppettider. En dag, eller många dagar framåt om du står på samma plats. På den här sidan sparas uppgifterna i den här webbläsaren.</p>
