@@ -18,6 +18,7 @@
       city: "Plats, med ord",
       pinMissing: "Platsen på kartan saknas.",
       pinSet: "Plats satt på kartan.",
+      pinOutside: "Sätt nålen inne i Sverige.",
       pick: "Välj plats på kartan",
       when: "När står ni där",
       oneDay: "En dag",
@@ -76,6 +77,7 @@
       city: "Sted, med ord",
       pinMissing: "Stedet på kartet mangler.",
       pinSet: "Sted satt på kartet.",
+      pinOutside: "Sett nålen inne i Norge.",
       pick: "Velg sted på kartet",
       when: "Når står dere der",
       oneDay: "Én dag",
@@ -138,7 +140,9 @@
     NO: [[57.9, 4.4], [71.3, 31.3]]
   };
 
-  var DEMOS = [];
+  var OUTLINES = null;
+  var tileLayer = null;
+  var outlineLayer = null;
 
   var state = {
     country: "SE",
@@ -246,7 +250,59 @@
     localStorage.setItem(STORAGE_TRUCKS, JSON.stringify(list));
   }
   function allTrucks() {
-    return DEMOS.concat(loadOwn());
+    return loadOwn().filter(function (tr) { return !tr.demo; });
+  }
+
+  function pointInRing(lng, lat, ring) {
+    var inside = false;
+    for (var i = 0, j = ring.length - 1; i < ring.length; j = i++) {
+      var yi = ring[i][1];
+      var yj = ring[j][1];
+      if ((yi > lat) === (yj > lat)) continue;
+      var xi = ring[i][0];
+      var xj = ring[j][0];
+      var x = (xj - xi) * (lat - yi) / (yj - yi) + xi;
+      if (lng < x) inside = !inside;
+    }
+    return inside;
+  }
+
+  function pointInCountry(lat, lng, code) {
+    var polys = OUTLINES && OUTLINES[code];
+    if (!polys) {
+      var box = BOUNDS[code];
+      return lat >= box[0][0] && lat <= box[1][0] && lng >= box[0][1] && lng <= box[1][1];
+    }
+    for (var p = 0; p < polys.length; p++) {
+      var rings = polys[p];
+      if (!rings.length || !pointInRing(lng, lat, rings[0])) continue;
+      var hole = false;
+      for (var h = 1; h < rings.length; h++) {
+        if (pointInRing(lng, lat, rings[h])) { hole = true; break; }
+      }
+      if (!hole) return true;
+    }
+    return false;
+  }
+
+  function countryLatLngBounds(code) {
+    var polys = OUTLINES && OUTLINES[code];
+    if (!polys) return L.latLngBounds(BOUNDS[code]);
+    var bounds = L.latLngBounds([]);
+    polys.forEach(function (poly) {
+      poly[0].forEach(function (c) { bounds.extend([c[1], c[0]]); });
+    });
+    return bounds;
+  }
+
+  function outlineFeature(code) {
+    var polys = OUTLINES && OUTLINES[code];
+    if (!polys) return null;
+    return {
+      type: "Feature",
+      properties: {},
+      geometry: { type: "MultiPolygon", coordinates: polys }
+    };
   }
   function inCountry(list) {
     return list.filter(function (tr) { return tr.country === state.country; });
@@ -307,7 +363,7 @@
     $("countryNO").setAttribute("aria-pressed", code === "NO" ? "true" : "false");
     applyCopy();
     if (map) {
-      map.fitBounds(BOUNDS[code], { padding: [24, 24] });
+      fitCountry();
       render();
     }
   }
@@ -468,6 +524,7 @@
   function startPlacing() {
     state.placing = true;
     document.body.classList.add("placing");
+    $("placeText").textContent = t("place");
     $("placeBanner").hidden = false;
     $("ownerPanel").hidden = true;
     setTimeout(function () { if (map) map.invalidateSize(); }, 40);
@@ -538,6 +595,12 @@
     if (!name) { err.textContent = t("needName"); return; }
     if (!city) { err.textContent = t("needCity"); return; }
     if (!state.pin) { err.textContent = t("needPin"); return; }
+    if (!pointInCountry(state.pin.lat, state.pin.lng, state.country)) {
+      state.pin = null;
+      updatePinStatus();
+      err.textContent = t("pinOutside");
+      return;
+    }
     var from = $("openFrom").value;
     var to = $("openTo").value;
     if (!from || !to || minutes(to) <= minutes(from)) { err.textContent = t("badHours"); return; }
@@ -632,22 +695,143 @@
     return "SE";
   }
 
+  var ClippedTiles = L.GridLayer.extend({
+    initialize: function (urls, options) {
+      this._urls = urls;
+      L.GridLayer.prototype.initialize.call(this, options);
+      this._polys = null;
+      this._stamp = 0;
+    },
+    setCountry: function (code) {
+      this._polys = (OUTLINES && OUTLINES[code]) || null;
+      this._stamp += 1;
+      this.redraw();
+    },
+    createTile: function (coords, done) {
+      var tile = document.createElement("canvas");
+      var size = this.getTileSize();
+      tile.width = size.x;
+      tile.height = size.y;
+      var ctx = tile.getContext("2d");
+      var stamp = this._stamp;
+      var self = this;
+      var urls = this._urls.map(function (url) {
+        return url
+          .replace("{z}", String(coords.z))
+          .replace("{y}", String(coords.y))
+          .replace("{x}", String(coords.x));
+      });
+      Promise.all(urls.map(function (url) {
+        return new Promise(function (resolve) {
+          var img = new Image();
+          img.crossOrigin = "anonymous";
+          img.onload = function () { resolve(img); };
+          img.onerror = function () { resolve(null); };
+          img.src = url;
+        });
+      })).then(function (imgs) {
+        if (stamp !== self._stamp || !self._polys) { done(null, tile); return; }
+        imgs.forEach(function (img) {
+          if (img) ctx.drawImage(img, 0, 0, size.x, size.y);
+        });
+        ctx.globalCompositeOperation = "destination-in";
+        self._fillCountry(ctx, coords, size.x);
+        done(null, tile);
+      });
+      return tile;
+    },
+    _fillCountry: function (ctx, coords, size) {
+      var polys = this._polys;
+      if (!polys) return;
+      var scale = size * Math.pow(2, coords.z);
+      var ox = coords.x * size;
+      var oy = coords.y * size;
+      ctx.beginPath();
+      for (var p = 0; p < polys.length; p++) {
+        var rings = polys[p];
+        for (var r = 0; r < rings.length; r++) {
+          var ring = rings[r];
+          for (var i = 0; i < ring.length; i++) {
+            var lng = ring[i][0];
+            var lat = ring[i][1];
+            var x = ((lng + 180) / 360) * scale - ox;
+            var latRad = lat * Math.PI / 180;
+            var s = Math.sin(latRad);
+            var y = (0.5 - Math.log((1 + s) / (1 - s)) / (4 * Math.PI)) * scale - oy;
+            if (i === 0) ctx.moveTo(x, y);
+            else ctx.lineTo(x, y);
+          }
+          ctx.closePath();
+        }
+      }
+      ctx.fillStyle = "#000";
+      ctx.fill("evenodd");
+    }
+  });
+
+  function syncOutline() {
+    if (outlineLayer) {
+      map.removeLayer(outlineLayer);
+      outlineLayer = null;
+    }
+    var feature = outlineFeature(state.country);
+    if (!feature) return;
+    outlineLayer = L.geoJSON(feature, {
+      interactive: false,
+      style: { color: "#1a120b", weight: 1.25, opacity: 0.45, fill: false, fillOpacity: 0 }
+    }).addTo(map);
+  }
+
+  function fitCountry() {
+    if (!map) return;
+    var bounds = countryLatLngBounds(state.country);
+    map.setMaxBounds(bounds.pad(0.05));
+    map.options.maxBoundsViscosity = 1;
+    if (tileLayer) tileLayer.setCountry(state.country);
+    syncOutline();
+    var tall = map.getContainer().clientHeight >= 400;
+    if (tall) map.setMinZoom(0);
+    map.invalidateSize();
+    map.fitBounds(bounds, { padding: [20, 20], animate: false });
+    if (tall) {
+      var z = map.getBoundsZoom(bounds, false);
+      if (isFinite(z)) map.setMinZoom(z);
+      if (map.getZoom() < z) map.setZoom(z);
+    }
+  }
+
   function initMap() {
-    map = L.map("map", { scrollWheelZoom: true });
-    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-      maxZoom: 19,
-      attribution: "&copy; OpenStreetMap"
+    var el = $("map");
+    el.addEventListener("wheel", function (ev) {
+      ev.stopImmediatePropagation();
+    }, { capture: true, passive: true });
+    map = L.map(el, { scrollWheelZoom: false, maxBoundsViscosity: 1, maxZoom: 16 });
+    tileLayer = new ClippedTiles([
+      "https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}",
+      "https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Reference/MapServer/tile/{z}/{y}/{x}"
+    ], {
+      maxZoom: 16,
+      attribution: "&copy; Esri, HERE, Garmin, OpenStreetMap"
     }).addTo(map);
     markers = L.layerGroup().addTo(map);
     map.on("click", function (ev) {
       if (!state.placing) return;
-      state.pin = { lat: Math.round(ev.latlng.lat * 10000) / 10000, lng: Math.round(ev.latlng.lng * 10000) / 10000 };
+      var lat = Math.round(ev.latlng.lat * 10000) / 10000;
+      var lng = Math.round(ev.latlng.lng * 10000) / 10000;
+      if (!pointInCountry(lat, lng, state.country)) {
+        $("placeText").textContent = t("pinOutside");
+        return;
+      }
+      state.pin = { lat: lat, lng: lng };
       stopPlacing();
       $("ownerPanel").hidden = false;
       updatePinStatus();
       setTimeout(function () { map.invalidateSize(); }, 40);
     });
-    map.fitBounds(BOUNDS[state.country], { padding: [24, 24] });
+    map.whenReady(function () {
+      map.invalidateSize();
+      fitCountry();
+    });
   }
 
   function init() {
@@ -710,6 +894,24 @@
       if (saved === "SE" || saved === "NO") return;
       state.outside = !!found.outside;
       setCountry(found.code, false);
+    });
+
+    fetch("data/country-outlines.json")
+      .then(function (res) { if (!res.ok) throw new Error("outline"); return res.json(); })
+      .then(function (data) {
+        if (!data || !data.SE || !data.NO) return;
+        OUTLINES = data;
+        if (map) {
+          map.invalidateSize();
+          fitCountry();
+        }
+      })
+      .catch(function () {});
+
+    window.addEventListener("load", function () {
+      if (!map) return;
+      map.invalidateSize();
+      fitCountry();
     });
   }
 
