@@ -385,6 +385,7 @@
     $("ownerTitle").textContent = t("ownerTitle");
     $("ownerPitch").textContent = t("ownerTitle");
     $("ownerHelp").textContent = t("ownerHelp");
+    if ($("ownerPitchBody")) $("ownerPitchBody").textContent = t("ownerHelp");
     $("lblName").textContent = t("name");
     $("photoHeading").textContent = t("photoHeading");
     $("photoIntro").textContent = t("photoIntro");

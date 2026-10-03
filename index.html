@@ -73,8 +73,8 @@
 
   <section class="owner-panel" id="ownerPanel" hidden>
     <form class="owner-form" id="ownerForm">
-      <h2 id="ownerTitle"></h2>
-      <p class="help" id="ownerHelp"></p>
+      <h2 id="ownerTitle">Marknadsför din foodtruck gratis</h2>
+      <p class="help" id="ownerHelp">Du marknadsför din foodtruck gratis genom att lägga in namn, bilder på trucken, bilder på maten, plats och öppettider. Besökare i samma land hittar dig på kartan. Besökare i ett annat land ser dig inte. Besökaren ser bara det du lägger in: namn, bilder, plats och öppettider. En dag, eller många dagar framåt om du står på samma plats. På den här sidan sparas uppgifterna i den här webbläsaren.</p>
 
       <label for="truckName" id="lblName"></label>
       <input id="truckName" name="name" type="text" maxlength="60" autocomplete="organization" required>
@@ -173,7 +173,22 @@
       <div id="map" role="application" aria-label="Karta"></div>
       <p class="summary" id="missingTruck" hidden>Den här trucken finns inte i den här webbläsaren.</p>
       <h2 class="owner-pitch" id="ownerPitch">Marknadsför din foodtruck gratis</h2>
+      <p class="tagline" id="ownerPitchBody">Du marknadsför din foodtruck gratis genom att lägga in namn, bilder på trucken, bilder på maten, plats och öppettider. Besökare i samma land hittar dig på kartan. Besökare i ett annat land ser dig inte. Besökaren ser bara det du lägger in: namn, bilder, plats och öppettider. En dag, eller många dagar framåt om du står på samma plats. På den här sidan sparas uppgifterna i den här webbläsaren.</p>
       <div class="cities" id="cityRow"></div>
+      <ul class="tagline" id="cityList">
+        <li>Stockholm</li>
+        <li>Gothenburg</li>
+        <li>Malmö</li>
+        <li>Uppsala</li>
+        <li>Linköping</li>
+        <li>Örebro</li>
+        <li>Sollentuna</li>
+        <li>Umeå</li>
+        <li>Västerås</li>
+        <li>Södermalm</li>
+        <li>Jönköping</li>
+        <li>Helsingborg</li>
+      </ul>
       <p class="tagline" id="tagline">Foodtruckheaven är ett gratis sätt att marknadsföra sin foodtruck. Hitta foodtrucks på kartan i det land du är i. Du kan byta land i inställningarna. Tryck på en foodtruck för att se namn, bilder, plats och öppettider som ägaren har lagt in.</p>
       <div class="under-map">
         <label for="recentSearch">Sök</label>
@@ -310,7 +325,7 @@
   </dialog>
   <footer>
     <div class="top-inner">
-      <p id="footerNote"></p>
+      <p id="footerNote">Tryck på en truck. Du ser namn, bilder, plats och öppettider. Det är det ägaren har lagt in. Inget annat.</p>
       <p>Foodtruckheaven.com</p>
     </div>
   </footer>
